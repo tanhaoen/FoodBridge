@@ -10,7 +10,7 @@ export const addListings = mutation({
     price: v.number(), 
     quantity: v.number(), 
     expiry_time: v.number(),
-    categories: v.array(v.string()), 
+    categories: v.array(v.string()), //list in alphabetical order
     thumbnail_url: v.string(), 
     address: v.string()
   },
