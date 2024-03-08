@@ -2,11 +2,11 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { CONVEX_URL } from "@env";
 import * as React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Avatar, Badge, Button, Card, Text, useTheme } from 'react-native-paper';
+import { Avatar, Badge, Button, Card, Icon, Text, useTheme } from 'react-native-paper';
 
 const ListingCard = (props) => {
     const theme = useTheme();
-    const { title, provider, price, quantity, availableUntil, distance, thumbnail } = props;
+    const { title, provider, price, quantity, availableUntil, distance, thumbnail, isVerified } = props;
 
     return (
       <Card style={styles.card}>
@@ -22,7 +22,11 @@ const ListingCard = (props) => {
           {/* Second Section */}
           <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10 }]}>
             <Text variant='titleMedium' style={[styles.text, {fontWeight: 'bold'}]}>{title}</Text>
-            <Text variant='titleSmall' style={[styles.text]}>{provider}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text variant='titleSmall' style={[styles.text]}>{provider}</Text>
+              {isVerified && (<Icon source='check-decagram' color='blue' />)}
+            </View>
+            
             <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontWeight: 'bold'}]}>${price}</Text>
 
             <Text variant='titleSmall' style={[styles.text]}>Available until: {availableUntil}</Text>

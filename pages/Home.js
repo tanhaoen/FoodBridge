@@ -27,6 +27,7 @@ export default function Home() {
       availableUntil = "5.30pm"
       distance = "400m"
       thumbnail = "https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img,w_1638/https://woonheng.com/wp-content/uploads/2021/05/Nasi-Lemak-Bungkus-2-1638x2048.jpg"
+      isVerified
       />
       <ListingCard
       title = "Briyani"
