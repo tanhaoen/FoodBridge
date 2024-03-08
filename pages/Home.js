@@ -1,10 +1,24 @@
-import { Text } from "react-native-paper";
+import * as React from 'react';
+import { Searchbar, Text, useTheme } from "react-native-paper";
 import ListingCard from "../components/ListingCard";
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const theme = useTheme();
 
   return (
       <>
+      <Searchbar
+      placeholder="Search"
+      onChangeText={setSearchQuery}
+      value={searchQuery}
+      style={{
+        backgroundColor: theme.colors.light,
+        marginHorizontal: 15,
+        marginTop: 10,
+        opacity: 0.7
+      }}
+      />
       <ListingCard
       title = "Nasi Lemak Bungkus"
       provider = "Jamie Lee"
