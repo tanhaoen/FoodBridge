@@ -1,11 +1,17 @@
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { CONVEX_URL } from "@env";
 import * as React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Avatar, Button, Card, Text, useTheme } from 'react-native-paper';
+import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
-const ListingCard = () => {
+const ListingCard = (props) => {
     const theme = useTheme();
+    const { title,
+      providerName,
+      price,
+      quantity,
+      expiryTime,
+      distance,
+      thumbnailUrl,
+      verifiedProvider } = props;
 
     return (
       <Card style={styles.card}>
@@ -14,19 +20,28 @@ const ListingCard = () => {
           {/* First Section */}
           <View style={[styles.section, { flex: 3 }]}>
             <Card.Cover
-              source={{ uri: 'https://picsum.photos/700' }}
+              source={{ uri: thumbnailUrl }}
               style={styles.cover} />
           </View>
   
           {/* Second Section */}
-          <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background }]}>
-            <Text style={[styles.text, styles.content]}>Food Title</Text>
+          <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10 }]}>
+            <Text variant='titleMedium' style={[styles.text, {fontWeight: 'bold'}]}>{title}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text variant='titleSmall' style={[styles.text]}>{providerName}</Text>
+              {verifiedProvider && (<Icon source='check-decagram' color='blue' />)}
+            </View>
+            
+            <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontWeight: 'bold'}]}>${price}</Text>
+
+            <Text variant='titleSmall' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+            <Text variant='labelSmall' style={[styles.text]}>{distance}m away</Text>
           </View>
   
           {/* Third Section */}
-          <View style={[styles.section, { flex: 2, backgroundColor: theme.colors.secondary, justifyContent: 'center', alignItems: 'center' }]}>
+          <View style={[styles.section, { flex: 2, backgroundColor: theme.colors.secondary, alignItems: 'center' }]}>
             
-            <Text variant='displayMedium' style={[{color: '#F0F08C', fontWeight: 'bold'}]}>10</Text>
+            <Text variant='displayMedium' style={[{color: '#F0F08C', fontWeight: 'bold'}]}>{quantity}</Text>
             <Text variant='titleLarge' style={[{color: '#F0F08C', fontWeight: 'bold'}]}>left</Text>
           </View>
         </View>
@@ -37,7 +52,7 @@ const ListingCard = () => {
 
 const styles = StyleSheet.create({
     card: {
-      marginHorizontal: 16,
+      // marginHorizontal: 16,
       marginTop: 20,
       borderRadius: 8,
       elevation: 4, // for shadow on Android
@@ -50,7 +65,8 @@ const styles = StyleSheet.create({
       overflow: 'hidden'
     },
     section: {
-      padding: 0
+      padding: 0,
+      justifyContent: 'center'
     },
     text: {
       color: '#333', // Default text color
