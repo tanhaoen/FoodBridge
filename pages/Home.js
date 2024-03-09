@@ -5,6 +5,7 @@ import { api } from "../convex/_generated/api";
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
+import BottomDrawer from "../components/BottomDrawer";
 import ListingCard from "../components/ListingCard";
 
 const Home = () => {
@@ -12,11 +13,31 @@ const Home = () => {
 
   const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedFilter, setSelectedFilter] = React.useState(null)
+  const [selectedSorting, setSelectedSorting] = React.useState(null);
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
 
   const listingData = useQuery(api.queryListings.queryListings, {
     column: selectedFilter?.column,
     input: selectedFilter?.input,
   });
+
+  const openDrawer = () => {
+    setDrawerVisible(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawerVisible(false);
+  };
+
+  const sampleAction = () => {
+    console.log("This is a sample action")
+  }
+
+  const handleSortingChange = (value) => {
+    // Handle the selected radio button value as needed
+    setSelectedSorting(value);
+    console.log(value);
+  };
 
   console.log(listingData);
 
@@ -32,7 +53,7 @@ const Home = () => {
   })
 
   const filterBar = [
-    {icon: 'sort', text: ''},
+    {icon: 'sort', text: '', action: openDrawer},
     {icon: 'food-takeout-box', text: 'Cuisine'},
     {icon: 'map-marker', text: 'Distance'},
     {icon: 'check-decagram', text: 'Verified'}
@@ -60,7 +81,7 @@ const Home = () => {
 
         <ScrollView horizontal style={styles.filter}>
           {filterBar.map((item, index) => (
-            <Chip icon={item.icon} style={styles.chip} onPress={() => console.log("Pressed")}>
+            <Chip icon={item.icon} style={styles.chip} onPress={item.action}>
               {item.text}
             </Chip>
           ))}
@@ -89,6 +110,8 @@ const Home = () => {
             <ActivityIndicator /> // You can replace this with a loading indicator or any other UI element
           )}
         </ScrollView>
+
+        <BottomDrawer visible={drawerVisible} onClose={closeDrawer} onSelectionChange={handleSortingChange} />
       </View>
   );
 }
