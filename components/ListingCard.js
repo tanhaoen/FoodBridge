@@ -4,7 +4,8 @@ import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-n
 
 const ListingCard = (props) => {
     const theme = useTheme();
-    const { title,
+    const {
+      title,
       providerName,
       price,
       quantity,

@@ -71,6 +71,7 @@ const Home = () => {
             listingData.length > 0 ? (
               listingData.map((item, index) => (
                 <ListingCard
+                  key={item._id}
                   title={item.title}
                   providerName={item.provider_name}
                   price={item.price}
