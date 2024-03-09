@@ -1,43 +1,87 @@
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { CONVEX_URL } from "@env";
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
 import * as React from 'react';
-import { Searchbar, Text, useTheme } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Chip, Searchbar, Text, useTheme } from "react-native-paper";
 import ListingCard from "../components/ListingCard";
 
-export default function Home() {
-  const [searchQuery, setSearchQuery] = React.useState('')
+const Home = () => {
   const theme = useTheme();
 
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const [selectedFilter, setSelectedFilter] = React.useState(null)
+
+  const listingData = useQuery(api.queryListings.queryListings, {
+    column: selectedFilter?.column,
+    input: selectedFilter?.input,
+  });
+
+  console.log(listingData);
+
+  const styles = StyleSheet.create({
+    chip: {
+      marginRight: 8,
+      marginTop: 10,
+      backgroundColor: theme.colors.selection
+    },
+    filter: {
+      marginBottom: 10
+    }
+  })
+
+  const filterBar = [
+    {icon: 'sort', text: ''},
+    {icon: 'food-takeout-box', text: 'Cuisine'},
+    {icon: 'map-marker', text: 'Distance'},
+    {icon: 'check-decagram', text: 'Verified'}
+  ];
+
+  const handleFilterPress = (filter) => {
+    // Update the selectedFilter state when a filter is pressed
+    setSelectedFilter({
+      column: filter.text.toLowerCase(), // Assuming text can be used as a column name
+      input: filter.text.toLowerCase()
+    });
+  };
+
   return (
-      <>
-      <Searchbar
-      placeholder="Search"
-      onChangeText={setSearchQuery}
-      value={searchQuery}
-      style={{
-        backgroundColor: theme.colors.light,
-        marginHorizontal: 15,
-        marginTop: 10,
-        opacity: 0.7
-      }}
-      />
-      <ListingCard
-      title = "Nasi Lemak Bungkus"
-      provider = "Jamie Lee"
-      price = "10.00"
-      quantity = "10"
-      availableUntil = "5.30pm"
-      distance = "400m"
-      thumbnail = "https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img,w_1638/https://woonheng.com/wp-content/uploads/2021/05/Nasi-Lemak-Bungkus-2-1638x2048.jpg"
-      isVerified
-      />
-      <ListingCard
-      title = "Briyani"
-      provider = "Jamie Lee"
-      price = "10.00"
-      quantity = "10"
-      availableUntil = "5.30pm"
-      distance = "400m"
-      thumbnail = "https://www.ajinomotofoodbizpartner.com.my/wp-content/uploads/2023/11/Briyani-Ricemobile-02-jpg.webp"
-      />
-      </>
+      <View style={{ marginHorizontal: 16, marginTop: 10 }}>
+        <Searchbar
+        placeholder="Search"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        style={{
+          backgroundColor: theme.colors.light,
+          opacity: 0.7
+        }}
+        />
+
+        <ScrollView horizontal style={styles.filter}>
+          {filterBar.map((item, index) => (
+            <Chip icon={item.icon} style={styles.chip} onPress={() => console.log("Pressed")}>
+              {item.text}
+            </Chip>
+          ))}
+        </ScrollView>
+        
+        <ScrollView vertical>
+          {listingData.map((item, index) => (
+            <ListingCard
+            title = {item.title}
+            providerName = {item.provider_name}
+            price = {item.price}
+            quantity = {item.quantity}
+            expiryTime = {item.expiry_time}
+            distance = "400"
+            thumbnailUrl = {item.thumbnail_url}
+            verifiedProvider = {item.verified_provider}
+            />
+          ))}
+        </ScrollView>
+      </View>
   );
 }
+
+export default Home;
