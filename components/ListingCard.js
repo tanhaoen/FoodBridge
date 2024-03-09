@@ -1,12 +1,17 @@
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { CONVEX_URL } from "@env";
 import * as React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Avatar, Badge, Button, Card, Icon, Text, useTheme } from 'react-native-paper';
+import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
 const ListingCard = (props) => {
     const theme = useTheme();
-    const { title, provider, price, quantity, availableUntil, distance, thumbnail, isVerified } = props;
+    const { title,
+      providerName,
+      price,
+      quantity,
+      expiryTime,
+      distance,
+      thumbnailUrl,
+      verifiedProvider } = props;
 
     return (
       <Card style={styles.card}>
@@ -15,7 +20,7 @@ const ListingCard = (props) => {
           {/* First Section */}
           <View style={[styles.section, { flex: 3 }]}>
             <Card.Cover
-              source={{ uri: thumbnail }}
+              source={{ uri: thumbnailUrl }}
               style={styles.cover} />
           </View>
   
@@ -23,14 +28,14 @@ const ListingCard = (props) => {
           <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10 }]}>
             <Text variant='titleMedium' style={[styles.text, {fontWeight: 'bold'}]}>{title}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text variant='titleSmall' style={[styles.text]}>{provider}</Text>
-              {isVerified && (<Icon source='check-decagram' color='blue' />)}
+              <Text variant='titleSmall' style={[styles.text]}>{providerName}</Text>
+              {verifiedProvider && (<Icon source='check-decagram' color='blue' />)}
             </View>
             
             <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontWeight: 'bold'}]}>${price}</Text>
 
-            <Text variant='titleSmall' style={[styles.text]}>Available until: {availableUntil}</Text>
-            <Text variant='labelSmall' style={[styles.text]}>{distance} away</Text>
+            <Text variant='titleSmall' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+            <Text variant='labelSmall' style={[styles.text]}>{distance}m away</Text>
           </View>
   
           {/* Third Section */}
@@ -47,7 +52,7 @@ const ListingCard = (props) => {
 
 const styles = StyleSheet.create({
     card: {
-      marginHorizontal: 16,
+      // marginHorizontal: 16,
       marginTop: 20,
       borderRadius: 8,
       elevation: 4, // for shadow on Android
