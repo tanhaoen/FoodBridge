@@ -4,7 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Chip, Searchbar, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
 import ListingCard from "../components/ListingCard";
 
 const Home = () => {
@@ -67,18 +67,26 @@ const Home = () => {
         </ScrollView>
         
         <ScrollView vertical>
-          {listingData.map((item, index) => (
-            <ListingCard
-            title = {item.title}
-            providerName = {item.provider_name}
-            price = {item.price}
-            quantity = {item.quantity}
-            expiryTime = {item.expiry_time}
-            distance = "400"
-            thumbnailUrl = {item.thumbnail_url}
-            verifiedProvider = {item.verified_provider}
-            />
-          ))}
+          {listingData ? (
+            listingData.length > 0 ? (
+              listingData.map((item, index) => (
+                <ListingCard
+                  title={item.title}
+                  providerName={item.provider_name}
+                  price={item.price}
+                  quantity={item.quantity}
+                  expiryTime={item.expiry_time}
+                  distance="400"
+                  thumbnailUrl={item.thumbnail_url}
+                  verifiedProvider={item.verified_provider}
+                />
+              ))
+            ) : (
+              <Text>No listings found</Text>
+            )
+          ) : (
+            <ActivityIndicator /> // You can replace this with a loading indicator or any other UI element
+          )}
         </ScrollView>
       </View>
   );
