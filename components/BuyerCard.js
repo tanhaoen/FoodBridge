@@ -69,7 +69,13 @@ const BuyerCard = (props) => {
 
         <View style={[styles.section, {flex: 5, alignItems: 'center', paddingRight: 10, backgroundColor: theme.colors.background}]}>
           {order.map((item, index) => (
-            <Text variant='titleSmall' style={[styles.text, {paddingLeft: 10}]}>{item.quantity} x {item.item}</Text>
+            <Text
+              key={index}
+              variant='titleSmall'
+              style={[styles.text, {paddingLeft: 10}]}
+            >
+              {item.quantity} x {item.item}
+            </Text>
           ))}
         </View>
 

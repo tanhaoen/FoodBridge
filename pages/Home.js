@@ -75,15 +75,20 @@ const Home = () => {
 
         <ScrollView horizontal style={styles.filter}>
           {filterBar.map((item, index) => (
-            <Chip icon={item.icon} style={styles.chip} onPress={item.action}>
+            <Chip
+              key={index}
+              icon={item.icon}
+              style={styles.chip}
+              onPress={item.action}
+            >
               {item.text}
             </Chip>
           ))}
         </ScrollView>
         
-        <ScrollView vertical>
-          {listingData ? (
-            listingData.length > 0 ? (
+        {listingData !== undefined ? (
+          <ScrollView vertical>
+            {listingData.length > 0 ? (
               listingData.map((item, index) => (
                 <ListingCard
                   key={item._id}
@@ -99,11 +104,12 @@ const Home = () => {
               ))
             ) : (
               <Text>No listings found</Text>
-            )
-          ) : (
-            <ActivityIndicator />
-          )}
-        </ScrollView>
+            )}
+          </ScrollView>
+        ) : (
+          <ActivityIndicator />
+        )}
+
 
         <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedSorting(value)} />
         <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedCuisine(value)} />
