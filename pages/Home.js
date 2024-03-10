@@ -5,7 +5,8 @@ import { api } from "../convex/_generated/api";
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
-import BottomDrawer from "../components/BottomDrawer";
+import SortListingDrawer from "../components/SortListingDrawer";
+import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
 
 const Home = () => {
@@ -14,29 +15,22 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedFilter, setSelectedFilter] = React.useState(null)
   const [selectedSorting, setSelectedSorting] = React.useState(null);
+  const [selectedCuisine, setSelectedCuisine] = React.useState([]);
   const [drawerVisible, setDrawerVisible] = React.useState(false);
+  const [currentDrawer, setCurrentDrawer] = React.useState('');
 
   const listingData = useQuery(api.queryListings.queryListings, {
     column: selectedFilter?.column,
     input: selectedFilter?.input,
   });
 
-  const openDrawer = () => {
+  const openDrawer = (drawer) => {
+    setCurrentDrawer(drawer);
     setDrawerVisible(true);
   };
 
   const closeDrawer = () => {
     setDrawerVisible(false);
-  };
-
-  const sampleAction = () => {
-    console.log("This is a sample action")
-  }
-
-  const handleSortingChange = (value) => {
-    // Handle the selected radio button value as needed
-    setSelectedSorting(value);
-    console.log(value);
   };
 
   console.log(listingData);
@@ -53,8 +47,8 @@ const Home = () => {
   })
 
   const filterBar = [
-    {icon: 'sort', text: '', action: openDrawer},
-    {icon: 'food-takeout-box', text: 'Cuisine'},
+    {icon: 'sort', text: '', action: () => openDrawer('sort')},
+    {icon: 'food-takeout-box', text: 'Cuisine', action: () => openDrawer('cuisine')},
     {icon: 'map-marker', text: 'Distance'},
     {icon: 'check-decagram', text: 'Verified'}
   ];
@@ -107,11 +101,12 @@ const Home = () => {
               <Text>No listings found</Text>
             )
           ) : (
-            <ActivityIndicator /> // You can replace this with a loading indicator or any other UI element
+            <ActivityIndicator />
           )}
         </ScrollView>
 
-        <BottomDrawer visible={drawerVisible} onClose={closeDrawer} onSelectionChange={handleSortingChange} />
+        <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedSorting(value)} />
+        <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedCuisine(value)} />
       </View>
   );
 }
