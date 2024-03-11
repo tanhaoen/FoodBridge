@@ -1,9 +1,9 @@
-import { Text, TouchableOpacity, View, StyleSheet, Image } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useTheme } from 'react-native-paper'
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { Text, TouchableOpacity, View, StyleSheet, Image, Animated } from 'react-native'
+import * as React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const OrderConfirm = ({ route }) => {
+    const [orderQuantity, setorderQuantity] = React.useState(1)
     const {
         title,
         providerName,
@@ -14,7 +14,20 @@ const OrderConfirm = ({ route }) => {
         thumbnailUrl,
         verifiedProvider
     } = route.params
-
+    const handleAddOrder = () => {
+        if (orderQuantity < quantity) {
+            setorderQuantity(orderQuantity + 1)
+        }
+    }
+    const handleRemoveOrder = () => {
+        if (orderQuantity > 1) {
+            setorderQuantity(orderQuantity - 1)
+        }
+    }
+    const handleConfirmOrder = () => {
+        
+    }
+    
     return (
         <View style={styles.container}>
             {/* The top green part */}
@@ -42,19 +55,47 @@ const OrderConfirm = ({ route }) => {
                 <Text style={styles.availableTime}>Availble Until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 <View style={styles.foodQuantity}>
                     <Text style={styles.price}>${price}</Text>
-                    <Text style={{fontSize: 25, marginTop: 15, fontWeight: "bold"}}> x 2</Text>
+                    <Text style={{fontSize: 25, marginTop: 15, fontWeight: "bold"}}> x {orderQuantity}</Text>
                 </View>
                 <View style={styles.foodTotalPrice}>
-                    <Text style={{fontWeight: "bold", fontSize: 16, marginTop: 30, marginRight: 10}}>Total:</Text>
-                    <Text style={{ fontSize: 50, fontWeight: 'bold', color: '#00692C'}}>${price * 2}</Text>
+                    <Text style={{fontWeight: "bold", fontSize: 20, marginTop: 30, marginRight: 10}}>Total:</Text>
+                    <Text style={{ fontSize: 50, fontWeight: 'bold', color: '#00692C', marginRight: 60}}>${price * orderQuantity}</Text>
                 </View>
-                
+                {/* The part where we let user decides on the quantity to place */}
+                <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20, marginLeft: 50}}>
+                    {/* The minus button */}
+                    <TouchableOpacity style={{backgroundColor: "red"}}>
+                        <Ionicons name={"remove"} size={29} style={{marginTop: 1}} onPress={handleRemoveOrder}/>
+                    </TouchableOpacity>
+
+                    {/* Middle part where it displays the quantity */}
+                    <View style={{backgroundColor: '#C4C4C4', padding: 2, paddingRight: 30, paddingLeft: 30, shadowOpacity: 1}}>
+                        <Text style={{fontSize: 20, fontWeight: 'bold', opacity: 1}}>{orderQuantity}</Text>
+                    </View>
+
+                    {/* The add button */}
+                    <TouchableOpacity style={{backgroundColor: "#2DCC70"}} onPress={handleAddOrder}>
+                        <Ionicons name={"add"} size={29} />
+                    </TouchableOpacity>
+
+                    {/* maximum amount */}
+                    <Text style={{marginLeft: 10, marginTop: 10, fontSize: 15, fontWeight: 'bold'}}>max: {quantity}</Text>
+                </View>
+                <View style={{alignItems:'center', fontWeight: 'bold', fontSize: '10'}}>
+                    {orderQuantity === quantity && (
+                        <Text style={{color: 'red'}}>Maximum quantity reached</Text>
+                    )}
+                    {orderQuantity === 1 && (
+                        <Text style={{color: "red"}}>Minimum quantity is 1</Text>
+                    )}
+                </View>
+                <TouchableOpacity style={[styles.confirmButton]} onPress={handleConfirmOrder}>
+                    <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold'}}>Confirm and Pick Up</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
 }
-
-export default OrderConfirm
 
 const styles = StyleSheet.create({
     container: {
@@ -84,7 +125,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         shadowRadius: 2,
         shadowOpacity: 1,
-      },
+    },
     provider: {
         fontSize: 25,
         fontWeight: "700",
@@ -113,7 +154,7 @@ const styles = StyleSheet.create({
     },
     availableTime: {
         fontSize: 20,
-        color: 'red',
+        color: 'black',
         fontWeight: 'bold',
         marginBottom: 40
     },
@@ -129,5 +170,14 @@ const styles = StyleSheet.create({
     foodTotalPrice: {
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    confirmButton: {
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: "#2DCC70",
+        borderRadius: 40,
+        marginTop: 10,
+        padding: 10,
     }
 })
+export default OrderConfirm
