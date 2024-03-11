@@ -21,7 +21,8 @@ export default defineSchema({
     .index("by_price", ["price"])
     .index("by_expiry_time", ["expiry_time"]),
     orders: defineTable({
-        listings_id : v.number(),
+        listings_id : v.id("listings"),
+        buyer_name: v.string(),
         quantity : v.number(),
         order_status : v.string()
     }),
