@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
 const BuyerCard = (props) => {
@@ -8,7 +8,8 @@ const BuyerCard = (props) => {
     buyerName,
     eta,
     distance,
-    order,
+    item,
+    quantity
   } = props;
 
   const theme = useTheme();
@@ -68,15 +69,12 @@ const BuyerCard = (props) => {
         </View>
 
         <View style={[styles.section, {flex: 5, alignItems: 'center', paddingRight: 10, backgroundColor: theme.colors.background}]}>
-          {order.map((item, index) => (
-            <Text
-              key={index}
-              variant='titleSmall'
-              style={[styles.text, {paddingLeft: 10}]}
-            >
-              {item.quantity} x {item.item}
-            </Text>
-          ))}
+          <Text
+            variant='titleSmall'
+            style={[styles.text, {paddingLeft: 10}]}
+          >
+          {quantity} x {item}
+          </Text>
         </View>
 
         <View style={[styles.section, {flex: 2, backgroundColor: theme.colors.primary, alignItems: 'center'}]}>
