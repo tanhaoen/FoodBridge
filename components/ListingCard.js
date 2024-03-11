@@ -1,5 +1,3 @@
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { CONVEX_URL } from "@env";
 import * as React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
