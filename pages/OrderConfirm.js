@@ -89,7 +89,7 @@ const OrderConfirm = ({ route }) => {
                         <Text style={{color: "red"}}>Minimum quantity is 1</Text>
                     )}
                 </View>
-                <TouchableOpacity style={[styles.confirmButton]} onPress>
+                <TouchableOpacity style={[styles.confirmButton]} onPress={handleConfirmOrder}>
                     <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold'}}>Confirm and Pick Up</Text>
                 </TouchableOpacity>
             </View>
