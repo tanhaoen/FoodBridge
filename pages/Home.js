@@ -5,6 +5,8 @@ import { api } from "../convex/_generated/api";
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
+import SortListingDrawer from "../components/SortListingDrawer";
+import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
 import BottomNavBar from "../components/BottomNavBar";
 
@@ -13,11 +15,24 @@ const Home = ({ navigation }) => {
 
   const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedFilter, setSelectedFilter] = React.useState(null)
+  const [selectedSorting, setSelectedSorting] = React.useState(null);
+  const [selectedCuisine, setSelectedCuisine] = React.useState([]);
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
+  const [currentDrawer, setCurrentDrawer] = React.useState('');
 
   const listingData = useQuery(api.queryListings.queryListings, {
     column: selectedFilter?.column,
     input: selectedFilter?.input,
   });
+
+  const openDrawer = (drawer) => {
+    setCurrentDrawer(drawer);
+    setDrawerVisible(true);
+  };
+
+  const closeDrawer = () => {
+    setDrawerVisible(false);
+  };
 
   const styles = StyleSheet.create({
     chip: {
@@ -31,8 +46,8 @@ const Home = ({ navigation }) => {
   })
 
   const filterBar = [
-    {icon: 'sort', text: ''},
-    {icon: 'food-takeout-box', text: 'Cuisine'},
+    {icon: 'sort', text: '', action: () => openDrawer('sort')},
+    {icon: 'food-takeout-box', text: 'Cuisine', action: () => openDrawer('cuisine')},
     {icon: 'map-marker', text: 'Distance'},
     {icon: 'check-decagram', text: 'Verified'}
   ];
@@ -59,7 +74,7 @@ const Home = ({ navigation }) => {
 
       <ScrollView horizontal style={styles.filter}>
         {filterBar.map((item, index) => (
-          <Chip icon={item.icon} style={styles.chip} onPress={() => console.log("Pressed")}>
+          <Chip icon={item.icon} style={styles.chip} onPress={item.action}>
             {item.text}
           </Chip>
         ))}
@@ -89,6 +104,8 @@ const Home = ({ navigation }) => {
           <ActivityIndicator /> // You can replace this with a loading indicator or any other UI element
         )}
       </ScrollView>
+      <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedSorting(value)} />
+      <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedCuisine(value)} />
     </View>
   );
 }
