@@ -1,51 +1,34 @@
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import * as React from "react";
-import { Appbar, BottomNavigation, Text } from "react-native-paper";
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "react-native-get-random-values";
 import { CONVEX_URL } from "@env";
-import Home from "./pages/Home";
-import Buyers from "./pages/Buyers";
-import Account from "./pages/Account";
+import OrderConfirm from "./pages/OrderConfirm";
+import BottomNavBar from "./components/BottomNavBar";
 import theme from "./theme";
+import NavigationBar from "./components/NavigationBar";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const convex = new ConvexReactClient(CONVEX_URL, {
+const convex = new ConvexReactClient(CONVEX_URL.toString(), {
   unsavedChangesWarning: false,
 });
 
-const HomeRoute = () => <Home />;
-
-const BuyersRoute = () => <Buyers />;
-
-const AccountRoute = () => <Account />;
+const Stack = createStackNavigator();
 
 export default function App() {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
-    { key: 'buyers', title: 'Buyers', focusedIcon: 'walk' },
-    { key: 'account', title: 'Account', focusedIcon: 'account' },
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeRoute,
-    buyers: BuyersRoute,
-    account: AccountRoute,
-  });
 
   return (
     <ConvexProvider client={convex}>
       <PaperProvider theme={theme}>
         <SafeAreaProvider>
-          <Appbar.Header>
-            <Appbar.Content title="Title" />
-          </Appbar.Header>
-          <BottomNavigation
-          navigationState={{ index, routes }}
-          onIndexChange={setIndex}
-          renderScene={renderScene}
-          />
+          <NavigationContainer>
+            <Stack.Navigator> 
+              <Stack.Screen name="Home" component={BottomNavBar} options={{headerShown: false}}/>
+              <Stack.Screen name="OrderConfirm" component={OrderConfirm} options={{title: 'Place Order'}}/>
+            </Stack.Navigator>
+          </NavigationContainer>
         </SafeAreaProvider>
       </PaperProvider>
     </ConvexProvider>

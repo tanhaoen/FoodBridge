@@ -8,8 +8,9 @@ import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
+import BottomNavBar from "../components/BottomNavBar";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const theme = useTheme();
 
   const [searchQuery, setSearchQuery] = React.useState('')
@@ -32,8 +33,6 @@ const Home = () => {
   const closeDrawer = () => {
     setDrawerVisible(false);
   };
-
-  console.log(listingData);
 
   const styles = StyleSheet.create({
     chip: {
@@ -60,18 +59,18 @@ const Home = () => {
       input: filter.text.toLowerCase()
     });
   };
-
+  
   return (
-      <View style={{ marginHorizontal: 16, marginTop: 10 }}>
-        <Searchbar
-        placeholder="Search"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        style={{
-          backgroundColor: theme.colors.light,
-          opacity: 0.7
-        }}
-        />
+    <View style={{ marginHorizontal: 16, marginTop: 10 }}>
+      <Searchbar
+      placeholder="Search"
+      onChangeText={setSearchQuery}
+      value={searchQuery}
+      style={{
+        backgroundColor: theme.colors.light,
+        opacity: 0.7
+      }}
+      />
 
         <ScrollView horizontal style={styles.filter}>
           {filterBar.map((item, index) => (
@@ -117,4 +116,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default Home
