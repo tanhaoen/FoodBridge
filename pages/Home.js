@@ -19,7 +19,7 @@ const Home = () => {
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [currentDrawer, setCurrentDrawer] = React.useState('');
 
-  const listingData = useQuery(api.queryListings.queryListings, {
+  const listingData = useQuery(api.listings.queryListings, {
     column: selectedFilter?.column,
     input: selectedFilter?.input,
   });
