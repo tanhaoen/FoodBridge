@@ -10,7 +10,8 @@ const theme = {
       light: "#CDFFED",
       background: "#ffffff",
       surface: "#2DCC70",
-      selection: "#9C9C9C"
+      selection: "#9C9C9C",
+      text: "black"
     }
 };
 
