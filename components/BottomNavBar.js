@@ -25,11 +25,9 @@ const BottomNavBar = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />
         },
-     })}
-      tabBarOptions={{
         activeTintColor: '#2DCC70',
         inactiveTintColor: 'grey'
-      }}
+     })}
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Buyers" component={Buyers} />

@@ -25,7 +25,7 @@ export default function App() {
         <SafeAreaProvider>
           <NavigationContainer>
             <Stack.Navigator> 
-              <Stack.Screen name="Home" component={BottomNavBar} options={{headerShown: false}}/>
+              <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false}}/>
               <Stack.Screen name="OrderConfirm" component={OrderConfirm} options={{title: 'Place Order'}}/>
             </Stack.Navigator>
           </NavigationContainer>

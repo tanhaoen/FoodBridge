@@ -8,7 +8,7 @@ import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
-import BottomNavBar from "../components/BottomNavBar";
+// import BottomNavBar from "../components/BottomNavBar";
 
 const Home = ({ navigation }) => {
   const theme = useTheme();
@@ -99,6 +99,7 @@ const Home = ({ navigation }) => {
                   distance="400"
                   thumbnailUrl={item.thumbnail_url}
                   verifiedProvider={item.verified_provider}
+                  navigation={navigation}
                 />
               ))
             ) : (
