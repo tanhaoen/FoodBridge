@@ -18,8 +18,8 @@ export const addOrders = mutation({
 
 export const queryOrders = query({
     args: {
-      column: v.string(), 
-      input : v.any()
+      column: v.optional(v.string()), 
+      input : v.optional(v.any())
     },
     handler: async (ctx, args) => {
         // return all listings 
@@ -30,12 +30,32 @@ export const queryOrders = query({
         //return listings.categories.collect();
         
         // return listing with input column and value
-        const order = await ctx.db.query("orders").filter(
-        (q) => (q.eq(q.field(args.column), args.input))).collect();
+        let orders;
 
-        return order;
+        if (args.column) {
 
+            orders = await ctx.db
+                .query("orders")
+                .filter((q) => (q.eq(q.field(args.column), args.input)))
+                .collect();
+        } else {
+            orders = await ctx.db.query("orders").collect();
         }
+
+        const orderDetails = await Promise.all(orders.map(async (order) => {
+            const listing = await ctx.db.get(order.listings_id);
+            return {
+                buyerName: order.buyer_name,
+                eta: 5,
+                distance: 500,
+                item: listing.title,
+                quantity: order.quantity
+            };
+        }));
+
+        return orderDetails;
+
+    }
 });
 
 export const updateOrders = mutation({

@@ -1,3 +1,6 @@
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
+
 import React from "react";
 import { RefreshControl, ScrollView, View } from "react-native";
 import { Button, Text } from "react-native-paper";
@@ -13,16 +16,10 @@ export default function Buyers() {
 		setRefreshing(false);
 		}, 2000);
 	}, []);
-  
-	const sampleOrder = [
-		{
-			buyerName: "John Doe",
-			eta: 5,
-			distance: 500,
-			item: "Curry Chicken",
-			quantity: 3
-		}
-	]
+
+	const orderData = useQuery(api.orders.queryOrders);
+
+	console.log(orderData);
 
 	return (
 		<View style={{ marginHorizontal: 16, marginTop: 30, flex: 1 }}>
@@ -35,7 +32,7 @@ export default function Buyers() {
 			</Button>
 			<ScrollView vertical style={{flex: 1}}>
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-				{sampleOrder.map((order, index) => (
+				{orderData.map((order, index) => (
 				<BuyerCard
 					key={index}
 					buyerName={order.buyerName}
