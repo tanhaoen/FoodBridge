@@ -100,7 +100,6 @@ const Home = ({ navigation }) => {
                   distance="400"
                   thumbnailUrl={item.thumbnail_url}
                   verifiedProvider={item.verified_provider}
-                  navigation={navigation}
                 />
               ))
             ) : (
