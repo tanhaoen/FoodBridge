@@ -36,26 +36,35 @@ export default function Account() {
 					</View>
 				</List.Accordion>
 				<List.Accordion title="Linked Payment Methods" id="payment">
-					<RadioButton.Group>
-						{paymentMethods.map((method, index) => (
-							<View style={{flexDirection: 'row', alignItems: 'center'}}>
-								<Image
-									source={method.imageSource}
-									style={{
-										width: 40, height: 30, objectFit: 'contain'
-									}} />
-								<View style={{flex: 1}}>
-									<RadioButton.Item
-										key={index}
-										label={method.label}
-										value={method.value}
-										status={selectedPayment === method.value ? 'checked' : 'unchecked'}
-										onPress={() => setSelectedPayment(method.value)}
-									/>
+					<View>
+						<RadioButton.Group>
+							{paymentMethods.map((method, index) => (
+								<View style={{flexDirection: 'row', alignItems: 'center'}}>
+									<Image
+										source={method.imageSource}
+										style={{
+											width: 40, height: 30, objectFit: 'contain'
+										}} />
+									<View style={{flex: 1}}>
+										<RadioButton.Item
+											key={index}
+											label={method.label}
+											value={method.value}
+											status={selectedPayment === method.value ? 'checked' : 'unchecked'}
+											onPress={() => setSelectedPayment(method.value)}
+										/>
+									</View>
 								</View>
-							</View>
-						))}
-					</RadioButton.Group>
+							))}
+						</RadioButton.Group>
+						<Button
+							mode="contained"
+							icon="plus"
+							style={{marginHorizontal: 80, marginBottom: 20}}
+						>
+							Add Payment Method
+						</Button>
+					</View>
 				</List.Accordion>
 				<List.Accordion title="Transaction History" id="history">
 						<List.Item title="Orders" />
