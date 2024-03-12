@@ -16,7 +16,7 @@ const BottomNavBar = () => {
           let iconName;
           let rn = route.name;
 
-          if (rn === "Home") {
+          if (rn === "Home Page") {
             iconName = focused ? 'home' : 'home-outline';
           } else if (rn === "Buyers") {
             iconName = focused ? 'people' : 'people-outline';
@@ -31,7 +31,7 @@ const BottomNavBar = () => {
         inactiveTintColor: 'grey'
       }}
     >
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Home Page" component={Home} />
       <Tab.Screen name="Buyers" component={Buyers} />
       <Tab.Screen name="Account" component={Account} />
     </Tab.Navigator>

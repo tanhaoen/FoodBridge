@@ -1,8 +1,9 @@
 import { Text, TouchableOpacity, View, StyleSheet, Image, Animated } from 'react-native'
 import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import RoutingMap from './RoutingMap';
 
-const OrderConfirm = ({ route }) => {
+const OrderConfirm = ({ navigation, route }) => {
     const [orderQuantity, setorderQuantity] = React.useState(1)
     const {
         title,
@@ -25,7 +26,7 @@ const OrderConfirm = ({ route }) => {
         }
     }
     const handleConfirmOrder = () => {
-        
+        navigation.navigate('RoutingMap')
     }
     
     return (
