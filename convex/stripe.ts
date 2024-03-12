@@ -12,7 +12,7 @@ export const pay = action({
             price : v.float64()},
 
     handler : async (ctx, args) => {
-        
+
         //instatiate Stripe object
         const stripe = new Stripe(process.env.SECRET_STRIPE_API_KEY!);
         const customer = await stripe.customers.create();
@@ -25,8 +25,8 @@ export const pay = action({
             },
           });
 
-        //Returns the Payment Intent’s client secret, 
-        //the Ephemeral Key’s secret, the Customer’s id, 
+        //returns the Payment Intent’s client secret, 
+        //the Ephemeral Key’s secret(optional, only for returning customers), the Customer’s id, 
         //and your publishable key
         return {
             paymentIntent: paymentIntent.client_secret,
