@@ -16,10 +16,11 @@ export default defineSchema({
         thumbnail_url: v.string(), 
         address: v.string()
     })
-    .index("by_provider_name", ["provider_name"])
-    .index("by_verified_provider", ["verified_provider"])
+    .index("by_expiry_time", ["expiry_time"])
     .index("by_price", ["price"])
-    .index("by_expiry_time", ["expiry_time"]),
+    .index("by_verified_provider", ["verified_provider"])
+    .index("by_categories", ["categories"]),
+
     orders: defineTable({
         listings_id : v.id("listings"),
         buyer_name: v.string(),
