@@ -1,9 +1,10 @@
-import { Text, TouchableOpacity, View, StyleSheet, Image, Animated } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, Image, Animated, Touchable } from 'react-native'
 import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import RoutingMap from './RoutingMap';
+import { ActivityIndicator, Card } from 'react-native-paper';
 
 const OrderConfirm = ({ navigation, route }) => {
+    const [isBuffering, setBuffering] = React.useState(false)
     const [orderQuantity, setorderQuantity] = React.useState(1)
     const {
         title,
@@ -26,9 +27,35 @@ const OrderConfirm = ({ navigation, route }) => {
         }
     }
     const handleConfirmOrder = () => {
-        navigation.navigate('RoutingMap')
+        setBuffering(true)
+        // Gives the user 8 seconds to cancel order
+        setTimeout(() => {
+            navigation.navigate("PickUpConfirmation", route.params)
+        }, 1000)
     }
-    
+    const handleCancelOrder = () => {
+        setBuffering(false)
+    }
+    const ConfirmPickUpText = () => {
+        return (
+            <TouchableOpacity style={[styles.confirmButton]} onPress={handleConfirmOrder}>
+                <Text style={{fontFamily: "Poppins", color: 'white', fontSize: 25}}>Confirm and Pick Up</Text>
+            </TouchableOpacity>
+        )
+    }
+    const BufferIndicator = () => {
+        return (
+            <View>
+                <View style={styles.confirmButton}>
+                    <Text style={{fontFamily: 'Poppins', fontSize: 25, color: 'white'}}>Sending Order</Text>
+                    <ActivityIndicator animating={true} color='white' size={35} style={{marginLeft: 10, marginBottom: 5}} />
+                </View>
+                <TouchableOpacity style={{alignItems: 'center'}} onPress={handleCancelOrder}>
+                    <Text style={{color: 'red', fontFamily: 'Poppins-Bold', marginTop: 10, fontSize: 20}}>Cancel Order</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
     return (
         <View style={styles.container}>
             {/* The top green part */}
@@ -56,43 +83,44 @@ const OrderConfirm = ({ navigation, route }) => {
                 <Text style={styles.availableTime}>Availble Until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 <View style={styles.foodQuantity}>
                     <Text style={styles.price}>${price}</Text>
-                    <Text style={{fontSize: 25, marginTop: 15, fontWeight: "bold"}}> x {orderQuantity}</Text>
+                    <Text style={{fontSize: 25, marginTop: 15, fontFamily: 'Poppins-SemiBold'}}> x {orderQuantity}</Text>
                 </View>
                 <View style={styles.foodTotalPrice}>
-                    <Text style={{fontWeight: "bold", fontSize: 20, marginTop: 30, marginRight: 10}}>Total:</Text>
-                    <Text style={{ fontSize: 50, fontWeight: 'bold', color: '#00692C', marginRight: 60}}>${price * orderQuantity}</Text>
+                    <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 18, marginTop: 32, marginRight: 10}}>Total:</Text>
+                    <Text style={{ fontSize: 50, fontFamily: 'Poppins-Bold', color: '#00692C', marginRight: 60}}>${price * orderQuantity}</Text>
                 </View>
                 {/* The part where we let user decides on the quantity to place */}
-                <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 20, marginLeft: 50}}>
+                <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 50, alignContent: 'center'}}>
                     {/* The minus button */}
                     <TouchableOpacity style={{backgroundColor: "red"}}>
-                        <Ionicons name={"remove"} size={29} style={{marginTop: 1}} onPress={handleRemoveOrder}/>
+                        <Ionicons name={"remove"} size={29} style={{marginTop: 5}} onPress={handleRemoveOrder}/>
                     </TouchableOpacity>
 
                     {/* Middle part where it displays the quantity */}
                     <View style={{backgroundColor: '#C4C4C4', padding: 2, paddingRight: 30, paddingLeft: 30, shadowOpacity: 1}}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold', opacity: 1}}>{orderQuantity}</Text>
+                        <Text style={{fontSize: 20, fontFamily: 'Poppins-Bold', opacity: 1}}>{orderQuantity}</Text>
                     </View>
 
                     {/* The add button */}
                     <TouchableOpacity style={{backgroundColor: "#2DCC70"}} onPress={handleAddOrder}>
-                        <Ionicons name={"add"} size={29} />
+                        <Ionicons name={"add"} size={29} style={{marginTop: 5}} />
                     </TouchableOpacity>
 
                     {/* maximum amount */}
-                    <Text style={{marginLeft: 10, marginTop: 10, fontSize: 15, fontWeight: 'bold'}}>max: {quantity}</Text>
+                    <Text style={{marginLeft: 10, marginTop: 10, fontSize: 15, fontFamily: 'Poppins-Bold'}}>max: {quantity}</Text>
                 </View>
-                <View style={{alignItems:'center', fontWeight: 'bold', fontSize: '10'}}>
+                <View style={{alignItems:'center', fontFamily: 'Poppins-Bold', fontSize: '10'}}>
                     {orderQuantity === quantity && (
-                        <Text style={{color: 'red'}}>Maximum quantity reached</Text>
+                        <Text style={{color: 'red', fontFamily: "Poppins"}}>Maximum quantity reached</Text>
                     )}
                     {orderQuantity === 1 && (
-                        <Text style={{color: "red"}}>Minimum quantity is 1</Text>
+                        <Text style={{color: "red", fontFamily: 'Poppins'}}>Minimum quantity is 1</Text>
                     )}
                 </View>
-                <TouchableOpacity style={[styles.confirmButton]} onPress={handleConfirmOrder}>
-                    <Text style={{color: 'white', fontSize: 25, fontWeight: 'bold'}}>Confirm and Pick Up</Text>
-                </TouchableOpacity>
+                {/* Confirm Order Button */}
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    {isBuffering ? <BufferIndicator /> : <ConfirmPickUpText />}
+                </View>
             </View>
         </View>
     )
@@ -128,8 +156,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
     },
     provider: {
+        fontFamily: 'Poppins-Bold',
         fontSize: 25,
-        fontWeight: "700",
         color: "white",
         textShadowColor: 'rgba(0, 0, 0, 1)', // Shadow color
         textShadowOffset: { width: 1, height: 3 }, // Shadow offset
@@ -143,30 +171,29 @@ const styles = StyleSheet.create({
         paddingVertical: 10, // Add vertical padding to the bottom section
     },
     foodTitle: {
+        fontFamily: 'Poppins',
         fontSize: 30,
-        fontWeight: 'bold',
-        marginTop: 20,
-        marginBottom: 20
+        fontFamily: 'Poppins-Bold',
+        marginTop: 0,
+        marginBottom: 0
     },
     foodDescription: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
+        fontSize: 17,
+        fontFamily: 'Poppins-SemiBold',
+        marginBottom: 0,
     },
     availableTime: {
-        fontSize: 20,
+        fontSize: 17,
         color: 'black',
-        fontWeight: 'bold',
-        marginBottom: 40
+        fontFamily: 'Poppins-SemiBold',
     },
     price: {
         fontSize: 40,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
         color: '#00692C'
     },
     foodQuantity: {
         flexDirection: 'row',
-        marginBottom: 25
     }, 
     foodTotalPrice: {
         flexDirection: 'row',
@@ -178,7 +205,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#2DCC70",
         borderRadius: 40,
         marginTop: 10,
-        padding: 10,
+        padding: 12,
+        justifyContent: 'center',
+        flexDirection: 'row'
     }
 })
 export default OrderConfirm

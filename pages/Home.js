@@ -68,7 +68,7 @@ const Home = ({ navigation }) => {
       value={searchQuery}
       style={{
         backgroundColor: theme.colors.light,
-        opacity: 0.7
+        opacity: 0.7,
       }}
       />
 
