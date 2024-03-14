@@ -3,13 +3,15 @@ import { mutation, query } from "./_generated/server";
 
 export const addOrders = mutation({
     args: { 
-        listings_id : v.number(),
+        listings_id : v.id('listings'),
+        buyer_name: v.string(),
         quantity : v.number(),
         order_status : v.string()
     },
     handler: async (ctx, args) => {
         return await ctx.db.insert("orders", {
             listings_id : args.listings_id,
+            buyer_name: args.buyer_name,
             quantity : args.quantity,
             order_status : args.order_status,
         });

@@ -14,15 +14,9 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as createListings from "../createListings.js";
-import type * as createOrders from "../createOrders.js";
-import type * as deleteListings from "../deleteListings.js";
-import type * as deleteOrders from "../deleteOrders.js";
-import type * as queryListings from "../queryListings.js";
-import type * as queryOrders from "../queryOrders.js";
+import type * as listings from "../listings.js";
+import type * as orders from "../orders.js";
 import type * as stripe from "../stripe.js";
-import type * as updateListings from "../updateListings.js";
-import type * as updateOrders from "../updateOrders.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -33,15 +27,9 @@ import type * as updateOrders from "../updateOrders.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  createListings: typeof createListings;
-  createOrders: typeof createOrders;
-  deleteListings: typeof deleteListings;
-  deleteOrders: typeof deleteOrders;
-  queryListings: typeof queryListings;
-  queryOrders: typeof queryOrders;
+  listings: typeof listings;
+  orders: typeof orders;
   stripe: typeof stripe;
-  updateListings: typeof updateListings;
-  updateOrders: typeof updateOrders;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
