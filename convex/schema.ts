@@ -26,4 +26,15 @@ export default defineSchema({
         quantity : v.number(),
         order_status : v.string()
     }),
+    accounts: defineTable({
+        username: v.string(),
+        password: v.string(),
+        first_name: v.string(),
+        last_name: v.string(),
+        email: v.string(),
+        phone: v.string(),
+        verified: v.boolean(),
+        level: v.number()
+    })
+    .index("by_username", ["username"])
   });
