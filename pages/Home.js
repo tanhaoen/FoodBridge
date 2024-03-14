@@ -8,57 +8,86 @@ import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
-// import BottomNavBar from "../components/BottomNavBar";
 
 const Home = ({ navigation }) => {
   const theme = useTheme();
 
   const [searchQuery, setSearchQuery] = React.useState('')
-  const [selectedFilter, setSelectedFilter] = React.useState(null)
-  const [selectedSorting, setSelectedSorting] = React.useState(null);
-  const [selectedCuisine, setSelectedCuisine] = React.useState([]);
+  const [selectedSorting, setSelectedSorting] = React.useState({ field: "_creationTime", order: "desc" });
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [currentDrawer, setCurrentDrawer] = React.useState('');
 
-  const listingData = useQuery(api.listings.queryListings, {
-    column: selectedFilter?.column,
-    input: selectedFilter?.input,
-  });
+  const [selectedCuisines, setSelectedCuisines] = React.useState([]);
+  const [verifiedOnly, setVerifiedOnly] = React.useState(false);
+
+  const listingData = useQuery(api.listings.queryListings);
+
+  const results = React.useMemo(() => {
+    if (listingData !== undefined) {
+      let temp = listingData;
+
+      temp = temp.sort((a, b) => {
+        if (a[selectedSorting.field] < b[selectedSorting.field]) {
+          return selectedSorting.order === "asc" ? -1 : 1;
+        } else if (a[selectedSorting.field] > b[selectedSorting.field]) {
+          return selectedSorting.order === "asc" ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+
+      if (verifiedOnly) {
+        temp = temp.filter((item) => item.verified_provider === true);
+      }
+
+      if (selectedCuisines.length > 0) {
+        temp = temp.filter((item) => selectedCuisines.includes(item.categories[0]));
+      }
+
+      return temp;
+    }
+  }, [listingData, verifiedOnly, selectedSorting, selectedCuisines]);
+
+  
 
   const openDrawer = (drawer) => {
     setCurrentDrawer(drawer);
     setDrawerVisible(true);
   };
 
-  const closeDrawer = () => {
-    setDrawerVisible(false);
-  };
-
   const styles = StyleSheet.create({
-    chip: {
+    chip_unselected: {
       marginRight: 8,
       marginTop: 10,
-      backgroundColor: theme.colors.selection
+      backgroundColor: theme.colors.light
+    },
+    chip_selected: {
+      marginRight: 8,
+      marginTop: 10,
+      backgroundColor: theme.colors.primary
     },
     filter: {
-      marginBottom: 10
+      marginBottom: 10,
+      flexDirection: 'row',
+      flexWrap: 'wrap'
     }
   })
 
-  const filterBar = [
-    {icon: 'sort', text: '', action: () => openDrawer('sort')},
-    {icon: 'food-takeout-box', text: 'Cuisine', action: () => openDrawer('cuisine')},
-    {icon: 'map-marker', text: 'Distance'},
-    {icon: 'check-decagram', text: 'Verified'}
-  ];
+  const handleSortingChange = (value) => {
+    if (value == "recent") {
+      setSelectedSorting({ field: "_creationTime", order: "desc" });
+    } else if (value === "expiry_latest") {
+      setSelectedSorting({ field: "expiry_time", order: "desc" });
+    } else if (value === "expiry_earliest") {
+      setSelectedSorting({ field: "expiry_time", order: "asc" });
+    } else if (value === "price") {
+      setSelectedSorting({ field: "price", order: "asc" });
+    }
+  }
 
-  const handleFilterPress = (filter) => {
-    // Update the selectedFilter state when a filter is pressed
-    setSelectedFilter({
-      column: filter.text.toLowerCase(), // Assuming text can be used as a column name
-      input: filter.text.toLowerCase()
-    });
-  };
+  const handleCuisineChange = (values) => {
+    setSelectedCuisines(values);
+  }
   
   return (
     <View style={{ marginHorizontal: 16, marginTop: 10 }}>
@@ -72,48 +101,67 @@ const Home = ({ navigation }) => {
       }}
       />
 
-        <ScrollView horizontal style={styles.filter}>
-          {filterBar.map((item, index) => (
-            <Chip
-              key={index}
-              icon={item.icon}
-              style={styles.chip}
-              onPress={item.action}
-            >
-              {item.text}
-            </Chip>
-          ))}
-        </ScrollView>
-        
-        {listingData !== undefined ? (
-          <ScrollView vertical>
-            {listingData.length > 0 ? (
-              listingData.map((item, index) => (
-                <ListingCard
-                  navigation={navigation}
-                  key={item._id}
-                  title={item.title}
-                  providerName={item.provider_name}
-                  price={item.price}
-                  quantity={item.quantity}
-                  expiryTime={item.expiry_time}
-                  distance="400"
-                  thumbnailUrl={item.thumbnail_url}
-                  verifiedProvider={item.verified_provider}
-                />
-              ))
-            ) : (
-              <Text>No listings found</Text>
-            )}
-          </ScrollView>
-        ) : (
-          <ActivityIndicator />
-        )}
+      <View style={styles.filter}>
+        <Chip
+          icon="sort"
+          style={styles.chip_unselected}
+          onPress={() => openDrawer('sort')}
+        />
 
+        <Chip
+          icon="food-takeout-box"
+          style={styles.chip_unselected}
+          onPress={() => openDrawer('cuisine')}
+        >
+          Cuisine
+        </Chip>
 
-        <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedSorting(value)} />
-        <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedCuisine(value)} />
+        <Chip
+          icon="map-marker"
+          style={styles.chip_unselected}
+          onPress={() => openDrawer('distance')}
+        >
+          Distance
+        </Chip>
+
+        <Chip
+          icon="check-decagram"
+          style={verifiedOnly ? styles.chip_selected : styles.chip_unselected}
+          onPress={() => setVerifiedOnly(!verifiedOnly)}
+        >
+          Verified
+        </Chip>
       </View>
+      
+      {listingData !== undefined ? (
+        <ScrollView vertical>
+          {listingData.length > 0 ? (
+            results.map((item, index) => (
+              <ListingCard
+                navigation={navigation}
+                key={item._id}
+                title={item.title}
+                providerName={item.provider_name}
+                price={item.price}
+                quantity={item.quantity}
+                expiryTime={item.expiry_time}
+                distance="400"
+                thumbnailUrl={item.thumbnail_url}
+                verifiedProvider={item.verified_provider}
+              />
+            ))
+          ) : (
+            <Text>No listings found</Text>
+          )}
+        </ScrollView>
+      ) : (
+        <ActivityIndicator />
+      )}
+
+
+      <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={() => setDrawerVisible(false)} onSelectionChange={handleSortingChange} />
+      <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={() => setDrawerVisible(false)} onSelectionChange={handleCuisineChange} />
+    </View>
   );
 }
 

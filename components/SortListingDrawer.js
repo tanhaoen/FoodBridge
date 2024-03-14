@@ -3,7 +3,7 @@ import { View, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } f
 import { Button, RadioButton, Text } from 'react-native-paper';
 
 const SortListingDrawer = ({ visible, onClose, onSelectionChange }) => {
-	const [selectedValue, setSelectedValue] = React.useState(null);
+	const [selectedValue, setSelectedValue] = React.useState("recent");
 
   const handleSelectionChange = (value) => {
     setSelectedValue(value);
@@ -33,7 +33,7 @@ const SortListingDrawer = ({ visible, onClose, onSelectionChange }) => {
 								onValueChange={(value) => handleSelectionChange(value)}
 								value={selectedValue}
 							>
-								<RadioButton.Item label="Recent" value="posting" />
+								<RadioButton.Item label="Recent" value="recent" />
 								<RadioButton.Item label="Distance" value="distance" />
 								<RadioButton.Item label="Expiry Time (latest)" value="expiry_latest" />
 								<RadioButton.Item label="Expiry Time (earliest)" value="expiry_earliest" />
