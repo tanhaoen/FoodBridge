@@ -64,8 +64,8 @@ export default function SignUpScreen() {
   };
  
   return (
-    <View >
-      {!pendingVerification && (
+    <View style={styles.container}>
+    {!pendingVerification && (
         <View>
         <View>
             <TextInput

@@ -1,6 +1,15 @@
 import React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
+import {StyleSheet} from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center', // centers children vertically in the container
+    alignItems: 'center', // centers children horizontally in the container
+    backgroundColor: '#fff', // just an example background color
+  }})
 
 export default function SignInScreen() {
     const { signIn, setActive, isLoaded } = useSignIn();
@@ -25,7 +34,7 @@ export default function SignInScreen() {
       }
     };
     return (
-      <View>
+      <View style={styles.container}>
         <View>
           <TextInput
             autoCapitalize="none"
