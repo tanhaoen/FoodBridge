@@ -8,7 +8,7 @@ import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
-import BottomNavBar from "../components/BottomNavBar";
+// import BottomNavBar from "../components/BottomNavBar";
 
 const Home = ({ navigation }) => {
   const theme = useTheme();
@@ -20,7 +20,7 @@ const Home = ({ navigation }) => {
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [currentDrawer, setCurrentDrawer] = React.useState('');
 
-  const listingData = useQuery(api.queryListings.queryListings, {
+  const listingData = useQuery(api.listings.queryListings, {
     column: selectedFilter?.column,
     input: selectedFilter?.input,
   });
@@ -72,41 +72,48 @@ const Home = ({ navigation }) => {
       }}
       />
 
-      <ScrollView horizontal style={styles.filter}>
-        {filterBar.map((item, index) => (
-          <Chip icon={item.icon} style={styles.chip} onPress={item.action}>
-            {item.text}
-          </Chip>
-        ))}
-      </ScrollView>
-      
-      <ScrollView vertical>
-        {listingData ? (
-          listingData.length > 0 ? (
-            listingData.map((item, index) => (
-              <ListingCard
-                navigation = {navigation}
-                key={item._id}
-                title={item.title}
-                providerName={item.provider_name}
-                price={item.price}
-                quantity={item.quantity}
-                expiryTime={item.expiry_time}
-                distance="400"
-                thumbnailUrl={item.thumbnail_url}
-                verifiedProvider={item.verified_provider}
-              />
-            ))
-          ) : (
-            <Text>No listings found</Text>
-          )
+        <ScrollView horizontal style={styles.filter}>
+          {filterBar.map((item, index) => (
+            <Chip
+              key={index}
+              icon={item.icon}
+              style={styles.chip}
+              onPress={item.action}
+            >
+              {item.text}
+            </Chip>
+          ))}
+        </ScrollView>
+        
+        {listingData !== undefined ? (
+          <ScrollView vertical>
+            {listingData.length > 0 ? (
+              listingData.map((item, index) => (
+                <ListingCard
+                  navigation={navigation}
+                  key={item._id}
+                  title={item.title}
+                  providerName={item.provider_name}
+                  price={item.price}
+                  quantity={item.quantity}
+                  expiryTime={item.expiry_time}
+                  distance="400"
+                  thumbnailUrl={item.thumbnail_url}
+                  verifiedProvider={item.verified_provider}
+                />
+              ))
+            ) : (
+              <Text>No listings found</Text>
+            )}
+          </ScrollView>
         ) : (
-          <ActivityIndicator /> // You can replace this with a loading indicator or any other UI element
+          <ActivityIndicator />
         )}
-      </ScrollView>
-      <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedSorting(value)} />
-      <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedCuisine(value)} />
-    </View>
+
+
+        <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedSorting(value)} />
+        <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={closeDrawer} onSelectionChange={(value) => setSelectedCuisine(value)} />
+      </View>
   );
 }
 

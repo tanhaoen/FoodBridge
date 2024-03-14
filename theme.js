@@ -11,7 +11,8 @@ const theme = {
       background: "#ffffff",
       surface: "#2DCC70",
       selection: "#9C9C9C",
-      text: "black"
+      text: "black",
+      error: "#BA1A1A"
     }
 };
 
