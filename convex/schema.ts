@@ -14,7 +14,10 @@ export default defineSchema({
         expiry_time: v.number(), //index
         categories: v.array(v.string()), //add in by alphabetical order 
         thumbnail_url: v.string(), 
-        address: v.string()
+        location: v.object({
+            latitude: v.number(),
+            longitude: v.number()
+        })
     })
     .index("by_expiry_time", ["expiry_time"])
     .index("by_price", ["price"])

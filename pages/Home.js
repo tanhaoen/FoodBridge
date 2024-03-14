@@ -1,16 +1,18 @@
-import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { CONVEX_URL } from "@env";
-import { useQuery } from "convex/react";
-import { api } from "../convex/_generated/api";
 import * as React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
+
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
+
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
+import { LocationContext } from "../components/LocationProvider";
 
 const Home = ({ navigation }) => {
   const theme = useTheme();
+  const { location, errorMsg } = React.useContext(LocationContext);
 
   const [searchQuery, setSearchQuery] = React.useState('')
   const [selectedSorting, setSelectedSorting] = React.useState({ field: "_creationTime", order: "desc" });
@@ -22,9 +24,33 @@ const Home = ({ navigation }) => {
 
   const listingData = useQuery(api.listings.queryListings);
 
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in kilometers
+    return parseInt(distance*1000);
+  };
+
+  const toRadians = (degrees) => {
+      return degrees * (Math.PI / 180);
+  };
+
   const results = React.useMemo(() => {
     if (listingData !== undefined) {
       let temp = listingData;
+
+      if (location !== undefined) {
+        temp = temp.map((item) => {
+          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          return item;
+        });
+      }
 
       temp = temp.sort((a, b) => {
         if (a[selectedSorting.field] < b[selectedSorting.field]) {
@@ -44,9 +70,11 @@ const Home = ({ navigation }) => {
         temp = temp.filter((item) => selectedCuisines.includes(item.categories[0]));
       }
 
+      
+
       return temp;
     }
-  }, [listingData, verifiedOnly, selectedSorting, selectedCuisines]);
+  }, [listingData, verifiedOnly, selectedSorting, selectedCuisines, location]);
 
   
 
@@ -145,7 +173,7 @@ const Home = ({ navigation }) => {
                 price={item.price}
                 quantity={item.quantity}
                 expiryTime={item.expiry_time}
-                distance="400"
+                distance={item.distance}
                 thumbnailUrl={item.thumbnail_url}
                 verifiedProvider={item.verified_provider}
               />
