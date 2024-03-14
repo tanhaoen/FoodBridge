@@ -6,7 +6,7 @@ import Stripe from "stripe";
 
 //this is the payment endpoint
 export const pay = action({
-
+   
     //takes in order_id, price
     args : {order_id : v.string(),
             price : v.float64()},
