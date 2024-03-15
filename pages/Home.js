@@ -45,7 +45,7 @@ const Home = ({ navigation }) => {
     if (listingData !== undefined) {
       let temp = listingData;
 
-      if (location !== undefined) {
+      if (location !== undefined && location !== null) {
         temp = temp.map((item) => {
           item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;

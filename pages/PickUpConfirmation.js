@@ -49,21 +49,13 @@ const PickUpConfirmation = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={{alignItems: 'center', justifyContent: 'center', padding: 30}}>
-                <Text style={{fontFamily: 'Poppins-Bold', fontSize: 25}}>Your order is ready!</Text>
-                <Text style={{fontFamily: 'Poppins-Bold', fontSize: 20}}>Pick up number is</Text>
-                <Text style={{fontFamily: 'Poppins', fontSize: 40, color: '#00692C'}}>ORDER_NUMBER</Text>
+                <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 25, padding: 10}}>Your order is ready!</Text>
+                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 20, padding: 10}}>Pick up number is</Text>
+                <Text style={{fontFamily: 'Poppins', fontSize: 40, color: '#00692C', padding: 15}}>ORDER_NUMBER</Text>
                 <Text style={{fontFamily: 'Poppins', fontSize: 25}}>Collect by {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} at </Text>
                 <TouchableOpacity onPress={handleAddressPress}>
                     <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>{address}</Text>
                 </TouchableOpacity>
-            </View>
-            {/* Payment details */}
-            <View style={{alignItems: 'flex-start', paddingLeft: 30}}>
-                <Text style={{fontFamily: 'Poppins', fontSize: 25, paddingLeft: 0}}>Payment Details</Text>
-                <View style={{flexDirection: 'row', marginTop: 20}}>
-                    <Ionicons name={"logo-paypal"} size={30} color={'#2DCC70'} />
-                    <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 20, marginLeft: 10}}>**57</Text>
-                </View>
             </View>
             {isPaymentSucessful ? <Buffering /> : <OrderCollectedButton />}
         </View>

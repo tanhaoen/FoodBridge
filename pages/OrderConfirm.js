@@ -97,7 +97,7 @@ const OrderConfirm = ({ navigation, route }) => {
                     </TouchableOpacity>
 
                     {/* Middle part where it displays the quantity */}
-                    <View style={{backgroundColor: '#C4C4C4', padding: 2, paddingRight: 30, paddingLeft: 30, shadowOpacity: 1}}>
+                    <View style={{backgroundColor: '#C4C4C4', padding: 2, paddingRight: 30, paddingLeft: 30}}>
                         <Text style={{fontSize: 20, fontFamily: 'Poppins-Bold', opacity: 1}}>{orderQuantity}</Text>
                     </View>
 
