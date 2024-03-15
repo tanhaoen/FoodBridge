@@ -18,6 +18,14 @@ import LocationProvider from "./components/LocationProvider";
 import OrderConfirm from "./pages/OrderConfirm";
 import PickUpConfirmation from "./pages/PickUpConfirmation";
 
+//auth//auth 
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { Authenticated, Unauthenticated} from "convex/react";
+import SignUpScreen from "./pages/auth/SignUpScreen";
+import SignInScreen from "./pages/auth/SignInScreen";
+
+
 const convex = new ConvexReactClient(CONVEX_URL.toString(), {
   unsavedChangesWarning: false,
 });
