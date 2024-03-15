@@ -6,13 +6,13 @@ const ListingCard = ({navigation, ...props}) => {
     const theme = useTheme();
     const {
       title,
-      providerName,
+      sellerName,
       price,
       quantity,
       expiryTime,
       distance,
       thumbnailUrl,
-      verifiedProvider } = props;
+      verified } = props;
 
     return (
       <TouchableOpacity onPress={() => navigation.navigate('OrderConfirm', props)}>
@@ -29,8 +29,8 @@ const ListingCard = ({navigation, ...props}) => {
             <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10 }]}>
               <Text variant='titleMedium' style={[styles.text, {fontFamily: "Poppins-Bold"}]}>{title}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text variant='titleSmall' style={[styles.text]}>{providerName}</Text>
-                {verifiedProvider && (<Icon source='check-decagram' color='blue' />)}
+                <Text variant='titleSmall' style={[styles.text]}>{sellerName}</Text>
+                {verified && (<Icon source='check-decagram' color='blue' />)}
               </View>
               
               <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price}</Text>
