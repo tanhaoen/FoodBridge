@@ -28,11 +28,9 @@ export default function Buyers() {
 		if (orderData !== undefined) {
 			let temp = orderData;
 
-			console.log(orderData);
-
 			if (location !== undefined) {
 				temp = temp.map((item) => {
-					item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.listing_location.latitude, item.listing_location.longitude);
+					item.distance = calculateDistance(item.buyer_location.latitude, item.buyer_location.longitude, item.listing_location.latitude, item.listing_location.longitude);
 					return item;
 				});
 				return temp;

@@ -34,6 +34,7 @@ export const queryOrders = query({
             if (listing !== undefined && buyer !== undefined) {
                 return {
                     buyer_name: buyer.first_name + " " + buyer.last_name,
+                    buyer_location: buyer.location,
                     listing_location: listing.location,
                     item: listing.title,
                     quantity: order.quantity

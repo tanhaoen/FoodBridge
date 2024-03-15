@@ -34,7 +34,8 @@ export default defineSchema({
         email: v.string(),
         phone: v.string(),
         verified: v.boolean(),
-        level: v.number()
+        level: v.number(),
+        location: v.object({latitude: v.number(), longitude: v.number()})
     })
     .index("by_username", ["username"])
   });
