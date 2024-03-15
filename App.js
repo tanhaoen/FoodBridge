@@ -1,16 +1,22 @@
-import { ConvexProvider, ConvexReactClient } from "convex/react";
 import * as React from "react";
-import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import { MD3LightTheme as DefaultTheme, PaperProvider, Text } from 'react-native-paper';
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import "react-native-get-random-values";
-import { CONVEX_URL } from "@env";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import OrderConfirm from "./pages/OrderConfirm";
+
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { CONVEX_URL } from "@env";
+
+import { useFonts } from "expo-font";
+
+import theme from "./theme";
+
 import BottomNavBar from "./components/BottomNavBar";
 import NavigationBar from "./components/NavigationBar";
-import RoutingMap from "./pages/RoutingMap";
-import theme from "./theme";
+import LocationProvider from "./components/LocationProvider";
+
+import OrderConfirm from "./pages/OrderConfirm";
+import PickUpConfirmation from "./pages/PickUpConfirmation";
 import { StripeProvider } from '@stripe/stripe-react-native';
 
 //auth 
@@ -27,6 +33,15 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
+  let [fontsLoaded] = useFonts({
+    "Poppins" : require('./assets/fonts/Poppins-Black.ttf'),
+    "Poppins-Bold": require('./assets/fonts/Poppins-Bold.ttf'),
+    "Poppins-SemiBold": require('./assets/fonts/Poppins-SemiBold.ttf')
+  })
+
+  if (!fontsLoaded) {
+    return <Text>App Loading</Text>
+  }
   return (
     <ClerkProvider publishableKey="pk_test_Zmx5aW5nLW11c2tveC0zNy5jbGVyay5hY2NvdW50cy5kZXYk">
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>      
