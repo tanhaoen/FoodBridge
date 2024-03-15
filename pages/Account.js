@@ -1,18 +1,65 @@
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
 import * as React from "react";
-import { Image, TouchableOpacity, View } from "react-native";
-import { Button, Icon, List, RadioButton, Text, TextInput, useTheme } from "react-native-paper";
+import { Image, TouchableOpacity, StyleSheet, View } from "react-native";
+import { Avatar, Banner, Button, Icon, List, RadioButton, Text, TextInput, useTheme } from "react-native-paper";
 
 export default function Account() {
 	
 	const theme = useTheme();
-
-	const [selectedPayment, setSelectedPayment] = React.useState('mastercard');
 
 	const paymentMapping = {
 		"mastercard": require("../assets/mastercard.png"),
 		"visa": require("../assets/visa.png"),
 		"paypal": require("../assets/paypal.png")
 	}
+
+	const accountData = useQuery(api.accounts.queryAccounts, {
+    username: 'jsmith2024',
+  });
+
+  const [tempUsername, setTempUsername] = React.useState(undefined);
+  const [tempEmail, setTempEmail] = React.useState(undefined);
+
+  React.useEffect(() => {
+    if (accountData) {
+      setTempUsername(accountData.username);
+      setTempEmail(accountData.email);
+    }
+  }, [accountData]);
+
+	const [selectedPayment, setSelectedPayment] = React.useState('mastercard');
+	const [validEmail, setValidEmail] = React.useState(true);
+	const [validUsername, setValidUsername] = React.useState(true);
+
+	const updateAccount = useMutation(api.accounts.updateAccount);
+	const checkValidUsername = useQuery(api.accounts.checkValidUsername);
+
+	const saveDetails = () => {
+		if (validEmail && validUsername) {
+			updateAccount({id: accountData._id, username: tempUsername, email: tempEmail});
+		}
+	}
+
+	const handleEmailChange = (email) => {
+		setTempEmail(email);
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (emailRegex.test(tempEmail)) {
+			setValidEmail(true);
+		} else {
+			setValidEmail(false);
+		}
+	}
+
+	const handleUsernameChange = (username) => {
+		setTempUsername(username);
+
+		if ((checkValidUsername({username: username}) || username === accountData.username) && username !== '') {
+			setValidUsername(true);
+		} else {
+			setValidUsername(false);
+		}
+	};
 
 	const paymentMethods = [
 		{label: 'Mastercard **** **** **** 1234', type: 'mastercard', value: 1},
@@ -24,54 +71,143 @@ export default function Account() {
 		method.imageSource = paymentMapping[method.type];
 	});
 
-	console.log(paymentMethods);
+	const styles = StyleSheet.create({
+		jumbotron: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			height: 120,
+			backgroundColor: theme.colors.primary,
+		},
+		jumbotron_info_group: {
+			flex: 8,
+			marginLeft: 40,
+		},
+		jumbotron_avatar: {
+			flex: 2,
+			justifyContent: 'flex-end',
+			marginRight: 80,
+		},
+		settings: {
+			marginHorizontal: 10,
+			backgroundColor: theme.colors.background,
+		},
+		accordion: {
+			borderBottomWidth: 1,
+			borderBottomColor: "#EEEEEE"
+		},
+		edit_profile_group: {
+			marginHorizontal: 30,
+		},
+		edit_profile_input: {
+			backgroundColor: theme.colors.light,
+			borderColor: theme.colors.primary,
+			borderRadius: 10,
+			marginBottom: 10
+		},
+		payment_method_group: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginLeft: 25
+		}
+	})
 
 	return (
-		<View style={{marginHorizontal: 10}}>
-			<List.AccordionGroup>
-				<List.Accordion title="Edit Profile" id="edit">
-					<View style={{marginHorizontal: 30, marginVertical: 10}}>
-						<TextInput label="Name" />
-						<TextInput label="Email" />
+		<View style={{backgroundColor: theme.colors.background, flex: 1}}>
+			{accountData !== undefined ? (
+			<>
+			<View style={styles.jumbotron}>
+				<View style={styles.jumbotron_info_group}>
+					<Text variant="headlineMedium" style={{color: 'white', fontWeight: 'bold'}}>{accountData.firstName} {accountData.lastName}</Text>
+					<View style={{flexDirection: 'row'}}>
+						<Text variant="titleMedium" style={{color: 'white', marginBottom: 7}}>@{accountData.username}</Text>
+						{accountData.verified ? (
+							<Icon source="check-decagram" color='blue' size={20} />
+						) : null}
 					</View>
-				</List.Accordion>
-				<List.Accordion title="Linked Payment Methods" id="payment">
-					<RadioButton.Group>
-						{paymentMethods.map((method, index) => (
-							<View style={{flexDirection: 'row', alignItems: 'center'}}>
-								<Image
-									source={method.imageSource}
-									style={{
-										width: 40, height: 30, objectFit: 'contain'
-									}} />
-								<View style={{flex: 1}}>
-									<RadioButton.Item
-										key={index}
-										label={method.label}
-										value={method.value}
-										status={selectedPayment === method.value ? 'checked' : 'unchecked'}
-										onPress={() => setSelectedPayment(method.value)}
-									/>
-								</View>
-							</View>
-						))}
-					</RadioButton.Group>
-				</List.Accordion>
-				<List.Accordion title="Transaction History" id="history">
-						<List.Item title="Orders" />
-						<List.Item title="Payments" />
-				</List.Accordion>
-				<List.Accordion title="Change Password" id="password">
-						<List.Item title="Password" />
-						<List.Item title="PIN" />
-				</List.Accordion>
-				<List.Accordion title="Help" id="help">
-						<List.Item title="FAQ" />
-						<List.Item title="Contact Us" />
-				</List.Accordion>
-			</List.AccordionGroup>
+					
+					<Text variant="titleMedium" style={{color: 'white'}}>Level {accountData.level} Foodie</Text>
+				</View>
+				<View style={styles.jumbotron_avatar}>
+					<Avatar.Image source={require('../assets/avatar.png')} size={80} />
+				</View>
+			</View>
+			<View style={styles.settings}>
+				<List.AccordionGroup>
+					<List.Accordion title="Edit Profile" id="edit" style={styles.accordion}>
+						<View style={styles.edit_profile_group}>
+							<TextInput
+								style={styles.edit_profile_input}
+								mode="outlined"
+								label="Username"
+								value={tempUsername}
+								onChangeText={handleUsernameChange}
+								error={!validUsername}
+							/>
+							<TextInput
+								style={styles.edit_profile_input}
+								mode="outlined"
+								label="Email"
+								value={tempEmail}
+								onChangeText={handleEmailChange}
+								error={!validEmail}
+							/>
+							<Button
+								mode="contained"
+								icon="check"
+								style={{marginHorizontal: 80, marginBottom: 10}}
+								onPress={saveDetails}
+							>
+								Save Details
+							</Button>
+						</View>
+					</List.Accordion>
+					<List.Accordion title="Linked Payment Methods" id="payment" style={styles.accordion}>
+						<View>
+							<RadioButton.Group>
+								{paymentMethods.map((method, index) => (
+									<View style={styles.payment_method_group} key={index}>
+										<Image
+											source={method.imageSource}
+											style={{width: 40, height: 30, objectFit: 'contain'}}
+										/>
+										<View style={{flex: 1}} key={index}>
+											<RadioButton.Item
+												key={index}
+												label={method.label}
+												value={method.value}
+												status={selectedPayment === method.value ? 'checked' : 'unchecked'}
+												onPress={() => setSelectedPayment(method.value)}
+											/>
+										</View>
+									</View>
+								))}
+							</RadioButton.Group>
+							<Button
+								mode="contained"
+								icon="plus"
+								style={{marginHorizontal: 80, marginBottom: 20}}
+							>
+								Add Payment Method
+							</Button>
+						</View>
+					</List.Accordion>
+					<List.Accordion title="Transaction History" id="history" style={styles.accordion}>
+							<List.Item title="Orders" />
+							<List.Item title="Payments" />
+					</List.Accordion>
+					<List.Accordion title="Change Password" id="password" style={styles.accordion}>
+					</List.Accordion>
+					<List.Accordion title="Help" id="help">
+							<List.Item title="FAQ" />
+							<List.Item title="Contact Us" />
+					</List.Accordion>
+				</List.AccordionGroup>
 
-			<Button mode='contained' buttonColor={theme.colors.error}>Logout</Button>
+				<Button mode='contained' buttonColor={theme.colors.error}>Logout</Button>
+			</View>
+			</>
+			) : null}
 		</View>
+		
 	);
 }
