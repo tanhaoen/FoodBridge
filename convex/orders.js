@@ -29,12 +29,12 @@ export const queryOrders = query({
 
         const results = await Promise.all(orders.map(async (order) => {
             const listing = await ctx.db.get(order.listings_id);
+            const buyer = await ctx.db.get(order.buyer_id);
 
-            if (listing !== null && listing !== undefined) {
+            if (listing !== undefined && buyer !== undefined) {
                 return {
-                    buyerName: order.buyer_name,
-                    eta: 5,
-                    distance: 500,
+                    buyer_name: buyer.first_name + " " + buyer.last_name,
+                    listing_location: listing.location,
                     item: listing.title,
                     quantity: order.quantity
                 };
