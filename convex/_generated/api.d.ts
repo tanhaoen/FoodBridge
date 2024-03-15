@@ -16,11 +16,8 @@ import type {
 } from "convex/server";
 import type * as listings from "../listings.js";
 import type * as orders from "../orders.js";
-<<<<<<< HEAD
 import type * as stripe from "../stripe.js";
-=======
 import type * as users from "../users.js";
->>>>>>> 08dcddbad2ab3e3885c75abf27929bf643802a24
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -33,11 +30,8 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   listings: typeof listings;
   orders: typeof orders;
-<<<<<<< HEAD
   stripe: typeof stripe;
-=======
   users: typeof users;
->>>>>>> 08dcddbad2ab3e3885c75abf27929bf643802a24
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
