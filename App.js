@@ -52,20 +52,20 @@ export default function App() {
             <NavigationContainer>
               <LocationProvider>
 
-              {/* <Unauthenticated>
+              <Unauthenticated>
                 <Stack.Navigator>
                   <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
                   <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
                 </Stack.Navigator>
-              </Unauthenticated> */}
+              </Unauthenticated>
 
-              {/* <Authenticated> */}
+              <Authenticated>
                 <Stack.Navigator> 
                   <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false}}/>
                   <Stack.Screen name="OrderConfirm" component={OrderConfirm} options={{title: 'Place Order'}}/>
                   <Stack.Screen name="PickUpConfirmation" component={PickUpConfirmation} options={{headerShown: false}}/>
                 </Stack.Navigator>
-              {/* </Authenticated> */}
+              </Authenticated>
               </LocationProvider>
             </NavigationContainer>
           </SafeAreaProvider>
