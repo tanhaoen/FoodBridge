@@ -9,8 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@clerk/clerk-expo": "^0.20.10",
     "@clerk/clerk-react": "^4.30.7",
+=======
+    "@react-native-community/geolocation": "^3.2.0",
+>>>>>>> 08dcddbad2ab3e3885c75abf27929bf643802a24
     "@react-navigation/bottom-tabs": "^6.5.17",
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/stack": "^6.3.25",
@@ -24,6 +28,8 @@
     "react-dom": "^18.2.0",
     "react-native": "0.73.4",
     "react-native-dotenv": "^3.4.11",
+    "react-native-geolocation-service": "^5.3.1",
+    "react-native-gesture-handler": "^2.15.0",
     "react-native-get-random-values": "^1.10.0",
     "react-native-ionicons": "^4.6.5",
     "react-native-maps": "^1.11.3",
@@ -31,8 +37,13 @@
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
     "react-native-vector-icons": "^10.0.3",
+<<<<<<< HEAD
     "stripe": "^14.20.0",
     "typescript": "^5.3.0"
+=======
+    "typescript": "^5.3.0",
+    "expo-location": "~16.5.5"
+>>>>>>> 08dcddbad2ab3e3885c75abf27929bf643802a24
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

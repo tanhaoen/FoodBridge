@@ -6,13 +6,13 @@ const ListingCard = ({navigation, ...props}) => {
     const theme = useTheme();
     const {
       title,
-      providerName,
+      sellerName,
       price,
       quantity,
       expiryTime,
       distance,
       thumbnailUrl,
-      verifiedProvider } = props;
+      verified } = props;
 
     return (
       <TouchableOpacity onPress={() => navigation.navigate('OrderConfirm', props)}>
@@ -27,13 +27,13 @@ const ListingCard = ({navigation, ...props}) => {
 
             {/* Second Section */}
             <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10 }]}>
-              <Text variant='titleMedium' style={[styles.text, {fontWeight: 'bold'}]}>{title}</Text>
+              <Text variant='titleMedium' style={[styles.text, {fontFamily: "Poppins-Bold"}]}>{title}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text variant='titleSmall' style={[styles.text]}>{providerName}</Text>
-                {verifiedProvider && (<Icon source='check-decagram' color='blue' />)}
+                <Text variant='titleSmall' style={[styles.text]}>{sellerName}</Text>
+                {verified && (<Icon source='check-decagram' color='blue' />)}
               </View>
               
-              <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontWeight: 'bold'}]}>${price}</Text>
+              <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price}</Text>
 
               <Text variant='titleSmall' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
               <Text variant='labelSmall' style={[styles.text]}>{distance}m away</Text>
@@ -42,8 +42,8 @@ const ListingCard = ({navigation, ...props}) => {
             {/* Third Section */}
             <View style={[styles.section, { flex: 2, backgroundColor: theme.colors.secondary, alignItems: 'center' }]}>
               
-              <Text variant='displayMedium' style={[{color: '#F0F08C', fontWeight: 'bold'}]}>{quantity}</Text>
-              <Text variant='titleLarge' style={[{color: '#F0F08C', fontWeight: 'bold'}]}>left</Text>
+              <Text variant='displayMedium' style={[{color: '#F0F08C', fontFamily: "Poppins-Bold"}]}>{quantity}</Text>
+              <Text variant='titleLarge' style={[{color: '#F0F08C', fontFamily: "Poppins-Bold"}]}>left</Text>
             </View>
           </View>
         </Card>
@@ -70,13 +70,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
+    fontFamily: 'Poppins-Bold',
     color: '#333', // Default text color
   },
   title: {
+    fontFamily: "Poppins",
     fontSize: 18,
-    fontWeight: 'bold',
   },
   subtitle: {
+    fontFamily: "Poppins-SemiBold",
     fontSize: 14,
     marginTop: 8,
   },

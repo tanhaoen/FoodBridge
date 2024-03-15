@@ -1,6 +1,41 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+// ============ USED FUNCTIONS ============
+
+export const queryListings = query({
+  args: {
+    user_id: v.id("users")
+  },
+  handler: async (ctx, args) => {
+    // return listing with input column and value
+    const listings = await ctx.db
+      .query("listings")
+      .filter((q) => q.neq(q.field("seller_id"), args.user_id))
+      .collect();
+
+    console.log(listings);
+
+    const results = await Promise.all(listings.map(async (listing) => {
+      const user = await ctx.db.get(listing.seller_id);
+
+      console.log(user);
+
+      if (user !== null && user !== undefined) {
+          return {
+              ...listing,
+              seller_name: user.first_name + " " + user.last_name,
+              verified: user.verified
+            };
+        }
+    }));
+
+    return results;
+  }
+});
+
+
+// ============ UNUSED FUNCTIONS ============
 export const addListings = mutation({
   args: {
     title: v.string(), 
@@ -29,37 +64,6 @@ export const addListings = mutation({
       address: args.address
     });
   }
-});
-
-export const queryListings = query({
-    args: {
-      column: v.optional(v.string()), 
-      input : v.optional(v.any())
-    },
-    handler: async (ctx, args) => {
-      // return all listings 
-      //const listings = await ctx.db.query("listings").collect();
-  
-      // observe that listings is of type object
-  
-      //return listings.categories.collect();
-      
-      // return listing with input column and value
-      if (args.column) {
-        // Return listings with the specified column and value
-        const listing = await ctx.db
-          .query("listings")
-          .filter((q) => q.eq(q.field(args.column), args.input))
-          .collect();
-  
-        return listing;
-      } else {
-        // Return all listings if no column is specified
-        const allListings = await ctx.db.query("listings").collect();
-  
-        return allListings;
-      }
-    }
 });
 
 export const updateListings = mutation({

@@ -7,23 +7,34 @@ export default defineSchema({
     listings: defineTable({
         title: v.string(), 
         description: v.string(), 
-        provider_name: v.string(), //index
-        verified_provider: v.boolean(), //index
-        price: v.number(), //index
+        seller_id: v.id("users"),
+        price: v.number(),
         quantity: v.number(), 
-        expiry_time: v.number(), //index
-        categories: v.array(v.string()), //add in by alphabetical order 
+        expiry_time: v.number(),
+        categories: v.array(v.string()),
         thumbnail_url: v.string(), 
-        address: v.string()
-    })
-    .index("by_provider_name", ["provider_name"])
-    .index("by_verified_provider", ["verified_provider"])
-    .index("by_price", ["price"])
-    .index("by_expiry_time", ["expiry_time"]),
+        location: v.object({
+            latitude: v.number(),
+            longitude: v.number()
+        })
+    }),
+
     orders: defineTable({
         listings_id : v.id("listings"),
-        buyer_name: v.string(),
+        seller_id : v.id("users"),
+        buyer_id: v.id("users"),
         quantity : v.number(),
         order_status : v.string()
     }),
+    users: defineTable({
+        username: v.string(),
+        password: v.string(),
+        first_name: v.string(),
+        last_name: v.string(),
+        email: v.string(),
+        phone: v.string(),
+        verified: v.boolean(),
+        level: v.number()
+    })
+    .index("by_username", ["username"])
   });

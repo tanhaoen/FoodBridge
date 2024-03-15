@@ -1,32 +1,33 @@
 import React from 'react';
-import { View, Modal, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Chip, List, Text, useTheme } from 'react-native-paper';
 
 const FilterListingDrawer = ({ visible, onClose, onSelectionChange }) => {
   const theme = useTheme();
 
-	const [tempSelectedValues, setTempSelectedValues] = React.useState([]);
+	const [initialValues, setInitialValues] = React.useState([]);
   const [selectedValues, setSelectedValues] = React.useState([]);
 
   const categories = ["Chinese", "Malay", "Indian", "Western", "Korean", "Thai", "Japanese"]
 
   const handleSelectionChange = (value) => {
-    const isSelected = tempSelectedValues.includes(value);
+    const isSelected = selectedValues.includes(value);
     const updatedValues = isSelected
-      ? tempSelectedValues.filter((selectedValue) => selectedValue !== value)
-      : [...tempSelectedValues, value];
+      ? selectedValues.filter((selectedValue) => selectedValue !== value)
+      : [...selectedValues, value];
 
-    setTempSelectedValues(updatedValues);
+    setSelectedValues(updatedValues);
   };
 
+  const handleBackgroundClose = () => {
+    setSelectedValues(initialValues);
+    onClose();
+  }
+
   const handleSave = () => {
-    setSelectedValues([...tempSelectedValues]);
-
-    if (onSelectionChange) {
-      onSelectionChange([...tempSelectedValues]);
-    }
-
-    onClose(); // Close the modal after saving
+    setInitialValues(selectedValues);
+    onSelectionChange(selectedValues);
+    onClose();
   };
 
   const styles = StyleSheet.create({
@@ -65,12 +66,12 @@ const FilterListingDrawer = ({ visible, onClose, onSelectionChange }) => {
 				animationType="slide"
 				transparent={true}
 				visible={visible}
-				onBackdropPress={onClose}
+				onBackdropPress={handleBackgroundClose}
 			>
 				<TouchableOpacity
 					activeOpacity={1}
 					style={styles.overlay}
-					onPress={onClose}
+					onPress={handleBackgroundClose}
 				>
 					<View style={styles.modalContainer}>
 						<View style={styles.drawerContainer}>
@@ -80,12 +81,11 @@ const FilterListingDrawer = ({ visible, onClose, onSelectionChange }) => {
                     <Chip
                       key={index}
                       style={[styles.chip,
-                        {backgroundColor: tempSelectedValues.includes(category) ? theme.colors.primary : theme.colors.light}
+                        {backgroundColor: selectedValues.includes(category) ? theme.colors.primary : theme.colors.light}
                       ]}
                       textStyle={{
-                        color: tempSelectedValues.includes(category) ? "white" : "black",
+                        color: selectedValues.includes(category) ? "white" : "black",
                       }}
-                      selected={tempSelectedValues.includes(category)}
                       onPress={() => handleSelectionChange(category)}
                       showSelectedCheck={false}
                     >
