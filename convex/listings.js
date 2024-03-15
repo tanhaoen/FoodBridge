@@ -1,6 +1,41 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+// ============ USED FUNCTIONS ============
+
+export const queryListings = query({
+  args: {
+    user_id: v.id("users")
+  },
+  handler: async (ctx, args) => {
+    // return listing with input column and value
+    const listings = await ctx.db
+      .query("listings")
+      .filter((q) => q.neq(q.field("seller_id"), args.user_id))
+      .collect();
+
+    console.log(listings);
+
+    const results = await Promise.all(listings.map(async (listing) => {
+      const user = await ctx.db.get(listing.seller_id);
+
+      console.log(user);
+
+      if (user !== null && user !== undefined) {
+          return {
+              ...listing,
+              seller_name: user.first_name + " " + user.last_name,
+              verified: user.verified
+            };
+        }
+    }));
+
+    return results;
+  }
+});
+
+
+// ============ UNUSED FUNCTIONS ============
 export const addListings = mutation({
   args: {
     title: v.string(), 
@@ -29,55 +64,6 @@ export const addListings = mutation({
       address: args.address
     });
   }
-});
-
-export const queryListings = query({
-    args: {
-      filters: v.optional(v.array(v.object({
-        field: v.string(),
-        value: v.any(),
-      }))),
-      sort_by: v.optional(v.object({
-        field: v.string(),
-        order: v.string(),
-      })),
-    },
-    handler: async (ctx, args) => {
-      // return listing with input column and value
-      if (args.filters || args.sorters) {
-        // Return listings with the specified column and value
-        let queryBuilder = await ctx.db.query("listings");
-
-        if (args.sorters) {
-          const sorters = args.sorters;
-
-          sorters.forEach((sorter) => {
-            const index = `by_${sorter.field}`;
-            queryBuilder = queryBuilder.withIndex(index).order(sorter.order);
-          })
-        }
-
-        if (args.filters) {
-          const filters = args.filters;
-
-          console.log(filters);
-
-          filters.forEach((filter) => {
-            queryBuilder = queryBuilder.filter((q) => q.eq(q.field(filter.field), filter.value));
-          })
-        }
-
-        const listings = await queryBuilder.collect();
-
-        return listings
-
-      } else {
-        // Return all listings if no column is specified
-        const listings = await ctx.db.query("listings").collect();
-  
-        return listings;
-      }
-    }
 });
 
 export const updateListings = mutation({

@@ -22,7 +22,7 @@ const Home = ({ navigation }) => {
   const [selectedCuisines, setSelectedCuisines] = React.useState([]);
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
-  const listingData = useQuery(api.listings.queryListings);
+  const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7" });
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of the Earth in kilometers
@@ -45,6 +45,7 @@ const Home = ({ navigation }) => {
     if (listingData !== undefined) {
       let temp = listingData;
 
+      // Calculate distance from listing
       if (location !== undefined) {
         temp = temp.map((item) => {
           item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
@@ -52,6 +53,7 @@ const Home = ({ navigation }) => {
         });
       }
 
+      // Apply sorting
       temp = temp.sort((a, b) => {
         if (a[selectedSorting.field] < b[selectedSorting.field]) {
           return selectedSorting.order === "asc" ? -1 : 1;
@@ -62,15 +64,15 @@ const Home = ({ navigation }) => {
         }
       });
 
+      // Toggle filter for verified listings
       if (verifiedOnly) {
-        temp = temp.filter((item) => item.verified_provider === true);
+        temp = temp.filter((item) => item.verified === true);
       }
 
+      // Filter for selected categories
       if (selectedCuisines.length > 0) {
         temp = temp.filter((item) => selectedCuisines.includes(item.categories[0]));
       }
-
-      
 
       return temp;
     }
@@ -169,13 +171,13 @@ const Home = ({ navigation }) => {
                 navigation={navigation}
                 key={item._id}
                 title={item.title}
-                providerName={item.provider_name}
+                sellerName={item.seller_name}
                 price={item.price}
                 quantity={item.quantity}
                 expiryTime={item.expiry_time}
                 distance={item.distance}
                 thumbnailUrl={item.thumbnail_url}
-                verifiedProvider={item.verified_provider}
+                verified={item.verified}
               />
             ))
           ) : (

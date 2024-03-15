@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+// ============ USED FUNCTIONS ============
 export const addOrders = mutation({
     args: { 
         listings_id : v.number(),
@@ -18,42 +19,29 @@ export const addOrders = mutation({
 
 export const queryOrders = query({
     args: {
-      column: v.optional(v.string()), 
-      input : v.optional(v.any())
+      user_id: v.id("users")
     },
     handler: async (ctx, args) => {
-        // return all listings 
-        //const listings = await ctx.db.query("listings").collect();
 
-        // observe that listings is of type object
+        const orders = await ctx.db.query("orders")
+            .filter((q) => (q.eq(q.field("seller_id"), args.user_id)))
+            .collect();
 
-        //return listings.categories.collect();
-        
-        // return listing with input column and value
-        let orders;
-
-        if (args.column) {
-
-            orders = await ctx.db
-                .query("orders")
-                .filter((q) => (q.eq(q.field(args.column), args.input)))
-                .collect();
-        } else {
-            orders = await ctx.db.query("orders").collect();
-        }
-
-        const orderDetails = await Promise.all(orders.map(async (order) => {
+        const results = await Promise.all(orders.map(async (order) => {
             const listing = await ctx.db.get(order.listings_id);
-            return {
-                buyerName: order.buyer_name,
-                eta: 5,
-                distance: 500,
-                item: listing.title,
-                quantity: order.quantity
-            };
+
+            if (listing !== null && listing !== undefined) {
+                return {
+                    buyerName: order.buyer_name,
+                    eta: 5,
+                    distance: 500,
+                    item: listing.title,
+                    quantity: order.quantity
+                };
+            }
         }));
 
-        return orderDetails;
+        return results;
 
     }
 });

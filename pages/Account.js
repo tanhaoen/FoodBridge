@@ -14,7 +14,7 @@ export default function Account() {
 		"paypal": require("../assets/paypal.png")
 	}
 
-	const accountData = useQuery(api.accounts.queryAccounts, {
+	const userData = useQuery(api.users.queryUsers, {
     username: 'jsmith2024',
   });
 
@@ -22,22 +22,22 @@ export default function Account() {
   const [tempEmail, setTempEmail] = React.useState(undefined);
 
   React.useEffect(() => {
-    if (accountData) {
-      setTempUsername(accountData.username);
-      setTempEmail(accountData.email);
+    if (userData) {
+      setTempUsername(userData.username);
+      setTempEmail(userData.email);
     }
-  }, [accountData]);
+  }, [userData]);
 
 	const [selectedPayment, setSelectedPayment] = React.useState('mastercard');
 	const [validEmail, setValidEmail] = React.useState(true);
 	const [validUsername, setValidUsername] = React.useState(true);
 
-	const updateAccount = useMutation(api.accounts.updateAccount);
-	const checkValidUsername = useQuery(api.accounts.checkValidUsername);
+	const updateAccount = useMutation(api.users.updateUser);
+	const checkValidUsername = useQuery(api.users.checkValidUsername);
 
 	const saveDetails = () => {
 		if (validEmail && validUsername) {
-			updateAccount({id: accountData._id, username: tempUsername, email: tempEmail});
+			updateAccount({id: userData._id, username: tempUsername, email: tempEmail});
 		}
 	}
 
@@ -54,7 +54,7 @@ export default function Account() {
 	const handleUsernameChange = (username) => {
 		setTempUsername(username);
 
-		if ((checkValidUsername({username: username}) || username === accountData.username) && username !== '') {
+		if ((checkValidUsername({username: username}) || username === userData.username) && username !== '') {
 			setValidUsername(true);
 		} else {
 			setValidUsername(false);
@@ -113,19 +113,19 @@ export default function Account() {
 
 	return (
 		<View style={{backgroundColor: theme.colors.background, flex: 1}}>
-			{accountData !== undefined ? (
+			{userData !== undefined ? (
 			<>
 			<View style={styles.jumbotron}>
 				<View style={styles.jumbotron_info_group}>
-					<Text variant="headlineMedium" style={{color: 'white', fontWeight: 'bold'}}>{accountData.firstName} {accountData.lastName}</Text>
+					<Text variant="headlineMedium" style={{color: 'white', fontWeight: 'bold'}}>{userData.firstName} {userData.lastName}</Text>
 					<View style={{flexDirection: 'row'}}>
-						<Text variant="titleMedium" style={{color: 'white', marginBottom: 7}}>@{accountData.username}</Text>
-						{accountData.verified ? (
+						<Text variant="titleMedium" style={{color: 'white', marginBottom: 7}}>@{userData.username}</Text>
+						{userData.verified ? (
 							<Icon source="check-decagram" color='blue' size={20} />
 						) : null}
 					</View>
 					
-					<Text variant="titleMedium" style={{color: 'white'}}>Level {accountData.level} Foodie</Text>
+					<Text variant="titleMedium" style={{color: 'white'}}>Level {userData.level} Foodie</Text>
 				</View>
 				<View style={styles.jumbotron_avatar}>
 					<Avatar.Image source={require('../assets/avatar.png')} size={80} />

@@ -1,24 +1,25 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
-export const queryAccounts = query({
+// ============ USED FUNCTIONS ============
+export const queryUsers = query({
     args: {
       username: v.string()
     },
     handler: async (ctx, args) => {
       
-        const account = await ctx.db
-          .query("accounts")
+        const user = await ctx.db
+          .query("users")
           .filter((q) => q.eq(q.field("username"), args.username))
           .first();
         return {
-            _id: account._id,
-            username: account.username,
-            firstName: account.first_name,
-            lastName: account.last_name,
-            email: account.email,
-            level: account.level,
-            verified: account.verified
+            _id: user._id,
+            username: user.username,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            level: user.level,
+            verified: user.verified
         };
     }
 });
@@ -30,12 +31,12 @@ export const checkValidUsername = query({
     handler: async (ctx, args) => {
 
       if (args.username) {
-        const account = await ctx.db
-          .query("accounts")
+        const user = await ctx.db
+          .query("users")
           .filter((q) => q.eq(q.field("username"), args.username))
           .first();
 
-        return account === null;
+        return user === null;
       }
 
       return true;
@@ -43,9 +44,9 @@ export const checkValidUsername = query({
     }
 });
 
-export const updateAccount = mutation({
+export const updateUser = mutation({
     args: {
-      id: v.id("accounts"),
+      id: v.id("users"),
       username: v.string(),
       email: v.string()
     },
