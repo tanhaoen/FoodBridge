@@ -17,7 +17,7 @@ export default function Buyers() {
 		}, 2000);
 	}, []);
 
-	const orderData = useQuery(api.orders.queryOrders);
+	const orderData = useQuery(api.orders.queryOrders, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7" });
 
 	console.log(orderData);
 
