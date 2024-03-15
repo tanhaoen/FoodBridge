@@ -1,16 +1,29 @@
 import * as React from "react";
 import { StyleSheet } from 'react-native';
 
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, Button } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center', // centers children vertically in the container
-    alignItems: 'center', // centers children horizontally in the container
-    backgroundColor: '#fff', // just an example background color
-  }})
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		padding: 20
+	},
+	inputField: {
+		marginVertical: 4,
+		height: 50,
+		borderWidth: 1,
+		borderColor: '#6c47ff',
+		borderRadius: 4,
+		padding: 10,
+		backgroundColor: '#fff'
+	},
+	button: {
+		margin: 8,
+		alignItems: 'center'
+	}
+});
  
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -71,16 +84,18 @@ export default function SignUpScreen() {
             <TextInput
               autoCapitalize="none"
               value={firstName}
-              placeholder="First Name..."
+              placeholder="First Name"
               onChangeText={(firstName) => setFirstName(firstName)}
+              style={styles.inputField}
             />
           </View>
           <View>
             <TextInput
               autoCapitalize="none"
               value={lastName}
-              placeholder="Last Name..."
+              placeholder="Last Name"
               onChangeText={(lastName) => setLastName(lastName)}
+              style={styles.inputField}
             />
           </View>
           <View>
@@ -89,6 +104,7 @@ export default function SignUpScreen() {
               value={emailAddress}
               placeholder="Email..."
               onChangeText={(email) => setEmailAddress(email)}
+              style={styles.inputField}
             />
           </View>
  
@@ -99,12 +115,18 @@ export default function SignUpScreen() {
               placeholderTextColor="#000"
               secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
+              style={styles.inputField}
             />
           </View>
  
-          <TouchableOpacity onPress={onSignUpPress}>
+          {/* <TouchableOpacity onPress={onSignUpPress}>
             <Text>Sign up</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <Button
+            title="Sign up"
+            onPress={onSignUpPress}
+            color={'#6c47ff'}
+            style={styles.button}></Button>
         </View>
       )}
       {pendingVerification && (
@@ -114,11 +136,17 @@ export default function SignUpScreen() {
               value={code}
               placeholder="Code..."
               onChangeText={(code) => setCode(code)}
+              style={styles.inputField}
             />
           </View>
-          <TouchableOpacity onPress={onPressVerify}>
+          {/* <TouchableOpacity onPress={onPressVerify}>
             <Text>Verify Email</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <Button
+            title="Verify Email"
+            onPress={onPressVerify}
+            color={'#6c47ff'}
+            style={styles.button}></Button>
         </View>
       )}
     </View>

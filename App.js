@@ -17,13 +17,15 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { Authenticated, Unauthenticated} from "convex/react";
-import SignUpScreen from "./pages/SignUpScreen";
+import SignUpScreen from "./pages/auth/SignUpScreen";
+import SignInScreen from "./pages/auth/SignInScreen";
 
 const convex = new ConvexReactClient(CONVEX_URL.toString(), {
   unsavedChangesWarning: false,
 });
 
 const Stack = createStackNavigator();
+//const 
 
 export default function App() {
 
@@ -40,7 +42,8 @@ export default function App() {
           <NavigationContainer>
             <Unauthenticated>
             <Stack.Navigator>
-              <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{headerShown: false}}/>
+              <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
+              <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
               </Stack.Navigator>
             </Unauthenticated>
             <Authenticated>
