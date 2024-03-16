@@ -34,7 +34,7 @@ const PickUpConfirmation = ({ navigation, route }) => {
         return (
             <View style={{justifyContent: 'flex-end', padding: 30, flex: 1, alignItems: 'center'}}>
                 <TouchableOpacity onPress={handleBackToHome} style={styles.OrderCollectedButton}>
-                    <Text style={{color: 'white', fontSize: 20, fontFamily: 'Poppins'}}>Order Collected</Text>
+                    <Text style={{color: 'white', fontSize: 25, fontFamily: 'Poppins'}}>Order Collected</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 80,
-        //alignItems: 'center'
+        alignItems: 'center'
     },
     OrderCollectedButton : {
         backgroundColor: '#2DCC70',
