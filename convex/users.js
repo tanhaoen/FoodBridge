@@ -54,3 +54,14 @@ export const updateUser = mutation({
         await ctx.db.patch(args.id, { username: args.username, email: args.email });
     }
 });
+
+export const updateLocation = mutation({
+    args: {
+      id: v.id("users"),
+      latitude: v.number(),
+      longitude: v.number()
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.patch(args.id, { location: { latitude: args.latitude, longitude: args.longitude } });
+    }
+});

@@ -1,11 +1,16 @@
 import React from 'react';
 import * as Location from 'expo-location';
 
+import { useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
+
 const LocationContext = React.createContext();
 
 const LocationProvider = ({ children }) => {
     const [location, setLocation] = React.useState(null);
     const [errorMsg, setErrorMsg] = React.useState(null);
+
+    const updateLocation = useMutation(api.users.updateLocation);
   
     React.useEffect(() => {
       (async () => {
@@ -17,6 +22,8 @@ const LocationProvider = ({ children }) => {
   
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
+
+        updateLocation({ id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7", latitude: location.coords.latitude, longitude: location.coords.longitude });
       })();
     }, []);
 

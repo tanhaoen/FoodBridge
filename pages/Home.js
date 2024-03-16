@@ -5,6 +5,8 @@ import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
+import { calculateDistance} from "../utils";
+
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
@@ -23,23 +25,6 @@ const Home = ({ navigation }) => {
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
   const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7" });
-
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Radius of the Earth in kilometers
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in kilometers
-    return parseInt(distance*1000);
-  };
-
-  const toRadians = (degrees) => {
-      return degrees * (Math.PI / 180);
-  };
 
   const results = React.useMemo(() => {
     if (listingData !== undefined) {

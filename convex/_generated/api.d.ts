@@ -16,7 +16,6 @@ import type {
 } from "convex/server";
 import type * as listings from "../listings.js";
 import type * as orders from "../orders.js";
-import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
 
 /**
@@ -30,7 +29,6 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   listings: typeof listings;
   orders: typeof orders;
-  stripe: typeof stripe;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

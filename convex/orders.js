@@ -4,15 +4,13 @@ import { mutation, query } from "./_generated/server";
 // ============ USED FUNCTIONS ============
 export const addOrders = mutation({
     args: { 
-        listings_id : v.id('listings'),
-        buyer_name: v.string(),
+        listings_id : v.number(),
         quantity : v.number(),
         order_status : v.string()
     },
     handler: async (ctx, args) => {
         return await ctx.db.insert("orders", {
             listings_id : args.listings_id,
-            buyer_name: args.buyer_name,
             quantity : args.quantity,
             order_status : args.order_status,
         });
@@ -31,12 +29,13 @@ export const queryOrders = query({
 
         const results = await Promise.all(orders.map(async (order) => {
             const listing = await ctx.db.get(order.listings_id);
+            const buyer = await ctx.db.get(order.buyer_id);
 
-            if (listing !== null && listing !== undefined) {
+            if (listing !== undefined && buyer !== undefined) {
                 return {
-                    buyerName: order.buyer_name,
-                    eta: 5,
-                    distance: 500,
+                    buyer_name: buyer.first_name + " " + buyer.last_name,
+                    buyer_location: buyer.location,
+                    listing_location: listing.location,
                     item: listing.title,
                     quantity: order.quantity
                 };
