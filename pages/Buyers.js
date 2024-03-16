@@ -52,7 +52,7 @@ export default function Buyers() {
 							key={index}
 							title={`${order.item} x ${order.quantity}`}
 							description={order.buyer_name}
-							left={props => <Icon source="cash" size={40} color={theme.colors.primary} />}
+							left={props => <Icon source={order.payment_method=="cash" ? "cash" : "wallet"} size={35} color={theme.colors.primary} />}
 							right={props => <View><Text>{order.distance}m</Text><Text>{order.eta} minutes away</Text></View>}
 							style={{borderBottomWidth: 1, borderBottomColor: "#EEEEEE"}}
 						/>
