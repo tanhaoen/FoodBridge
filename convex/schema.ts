@@ -4,28 +4,28 @@ import { v } from "convex/values";
 
 // Define the schema for the database
 export default defineSchema({
-    // listings: defineTable({
-    //     title: v.string(), 
-    //     description: v.string(), 
-    //     seller_id: v.id("users"),
-    //     price: v.number(),
-    //     quantity: v.number(), 
-    //     expiry_time: v.number(),
-    //     categories: v.array(v.string()),
-    //     thumbnail_url: v.string(), 
-    //     location: v.object({
-    //         latitude: v.number(),
-    //         longitude: v.number()
-    //     })
-    // }),
+    listings: defineTable({
+        title: v.string(), 
+        description: v.string(), 
+        seller_id: v.id("users"),
+        price: v.number(),
+        quantity: v.number(), 
+        expiry_time: v.number(),
+        categories: v.array(v.string()),
+        thumbnail_url: v.string(), 
+        location: v.object({
+            latitude: v.number(),
+            longitude: v.number()
+        })
+    }),
 
-    // orders: defineTable({
-    //     listings_id : v.id("listings"),
-    //     seller_id : v.id("users"),
-    //     buyer_id: v.id("users"),
-    //     quantity : v.number(),
-    //     order_status : v.string()
-    // }),
+    orders: defineTable({
+        listings_id : v.id("listings"),
+        seller_id : v.id("users"),
+        buyer_id: v.id("users"),
+        quantity : v.number(),
+        order_status : v.string()
+    }),
     users: defineTable({
         username: v.string(),
         password: v.string(),
