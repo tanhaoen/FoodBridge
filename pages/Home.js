@@ -5,7 +5,7 @@ import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-import { calculateDistance} from "../utils";
+//import { calculateDistance} from "../utils";
 
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
@@ -33,7 +33,8 @@ const Home = ({ navigation }) => {
       // Calculate distance from listing
       if (location !== undefined) {
         temp = temp.map((item) => {
-          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          item.distance = 5;
+          //item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;
         });
       }

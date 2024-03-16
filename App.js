@@ -18,7 +18,7 @@ import LocationProvider from "./components/LocationProvider";
 import OrderConfirm from "./pages/OrderConfirm";
 import PickUpConfirmation from "./pages/PickUpConfirmation";
 
-//auth//auth 
+//auth
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { Authenticated, Unauthenticated} from "convex/react";
@@ -66,6 +66,7 @@ export default function App() {
                   <Stack.Screen name="PickUpConfirmation" component={PickUpConfirmation} options={{headerShown: false}}/>
                 </Stack.Navigator>
               </Authenticated>
+              
               </LocationProvider>
             </NavigationContainer>
           </SafeAreaProvider>

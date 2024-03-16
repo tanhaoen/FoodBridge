@@ -1,9 +1,11 @@
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View, StyleSheet, Button, Pressable, Alert } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet, Button, Pressable, Alert, Image } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { useSignIn } from "@clerk/clerk-expo";
+import { useSignIn, useOAuth } from "@clerk/clerk-expo";
 import SignUpScreen from './SignUpScreen';
+import { useWarmUpBrowser } from "./useWarmUpBrowser";
 
+const googleIcon = require('../../assets/google3.png');
 
 const styles = StyleSheet.create({
 	container: {
@@ -23,7 +25,12 @@ const styles = StyleSheet.create({
 	button: {
 		margin: 8,
 		alignItems: 'center'
-	}
+	},
+  buttonIcon: {
+    width: 24,  // Specify the width of the icon
+    height: 24, // Specify the height of the icon
+    resizeMode: 'contain', // This ensures the image is scaled proportionally
+  },
 });
 
 
@@ -34,6 +41,26 @@ export default function SignInScreen() {
     const [password, setPassword] = React.useState("");
 
     const navigation = useNavigation();
+
+    //oAuth
+    useWarmUpBrowser();
+    const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+
+    // Event handler for signing in with OAuth
+    const SignInWithOAuth = React.useCallback(async () => {
+        try {
+            const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow();
+
+            if (createdSessionId) {
+                await setActive({ session: createdSessionId });
+
+            } else {
+                // Use signIn or signUp for next steps such as MFA
+            }
+        } catch (err) {
+            console.error("OAuth error", err);
+        }
+    }, [startOAuthFlow]);
 
     const onSignInPress = async () => {
       if (!isLoaded) {
@@ -93,6 +120,12 @@ export default function SignInScreen() {
 				</Pressable>
 			{/* </Link> */}
       </View>
+      <View>
+      <TouchableOpacity style={styles.button} onPress={SignInWithOAuth}>
+        <Image source={googleIcon}/>
+        {/* <Text style={styles.buttonText}>Sign in with Google</Text> */}
+      </TouchableOpacity>        
+        </View>
     </View>
       
     )};
