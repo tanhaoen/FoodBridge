@@ -124,7 +124,6 @@ const Home = ({ navigation }) => {
   const handleAddListing = () => {
     navigation.navigate("Create Listing")
   }
-  
   return (
     <View style={{ marginHorizontal: 16, marginTop: 10, flex: 1 }}>
       <Searchbar
