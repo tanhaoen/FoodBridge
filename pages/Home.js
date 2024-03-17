@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, View, Image } from 'react-native';
-import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Chip, Divider, Searchbar, Text, useTheme } from "react-native-paper";
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-// import { calculateDistance} from "../utils";
+import { calculateDistance} from "../utils";
+
+import Slider from '@react-native-community/slider';
 
 import SortListingDrawer from "../components/SortListingDrawer";
-import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
 import { LocationContext } from "../components/LocationProvider";
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -17,12 +18,15 @@ const Home = ({ navigation }) => {
   const theme = useTheme();
   const { location, errorMsg } = React.useContext(LocationContext);
 
-  const [searchQuery, setSearchQuery] = React.useState('')
-  const [selectedSorting, setSelectedSorting] = React.useState({ field: "_creationTime", order: "desc" });
-  const [drawerVisible, setDrawerVisible] = React.useState(false);
-  const [currentDrawer, setCurrentDrawer] = React.useState('');
+  const cuisines = ["Chinese", "Malay", "Indian", "Western", "Korean", "Thai", "Japanese"]
 
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
+  const [currentOption, setCurrentOption] = React.useState('');
+  const [selectedSorting, setSelectedSorting] = React.useState({ field: "_creationTime", order: "desc" });
   const [selectedCuisines, setSelectedCuisines] = React.useState([]);
+  const [displayDistance, setDisplayDistance] = React.useState(1000);
+  const [selectedDistance, setSelectedDistance] = React.useState(1000);
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
   const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7" });
@@ -59,33 +63,46 @@ const Home = ({ navigation }) => {
         temp = temp.filter((item) => selectedCuisines.includes(item.categories[0]));
       }
 
+      // Filter for distance
+      temp = temp.filter((item) => item.distance <= selectedDistance);
+
       return temp;
     }
-  }, [listingData, verifiedOnly, selectedSorting, selectedCuisines, location]);
+  }, [listingData, selectedSorting, selectedCuisines, selectedDistance, verifiedOnly, location]);
 
-  
+  const handleCuisineChange = (value) => {
+    const isSelected = selectedCuisines.includes(value);
+    const updatedCuisines = isSelected
+      ? selectedCuisines.filter((selectedCuisine) => selectedCuisine !== value)
+      : [...selectedCuisines, value];
 
-  const openDrawer = (drawer) => {
-    setCurrentDrawer(drawer);
-    setDrawerVisible(true);
+    setSelectedCuisines(updatedCuisines);
   };
 
   const styles = StyleSheet.create({
-    chip_unselected: {
+    chip: {
       marginRight: 8,
-      marginTop: 10,
-      backgroundColor: theme.colors.light
+      marginTop: 10
+    },
+    chip_unselected: {
+      backgroundColor: theme.colors.light,
+      color: 'black'
     },
     chip_selected: {
-      marginRight: 8,
-      marginTop: 10,
-      backgroundColor: theme.colors.primary
+      backgroundColor: theme.colors.primary,
+      color: 'white'
     },
     filter: {
-      marginBottom: 10,
+      marginBottom: 25,
       flexDirection: 'row',
       flexWrap: 'wrap'
-    }
+    },
+    row : {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 10,
+      flexWrap: 'wrap'
+    },
   })
 
   const handleSortingChange = (value) => {
@@ -111,47 +128,93 @@ const Home = ({ navigation }) => {
   return (
     <View style={{ marginHorizontal: 16, marginTop: 10, flex: 1 }}>
       <Searchbar
-      placeholder="Search"
-      onChangeText={setSearchQuery}
-      value={searchQuery}
-      style={{
-        backgroundColor: theme.colors.light,
-        opacity: 0.7,
-      }}
+        placeholder="Search"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        style={{
+          backgroundColor: theme.colors.light,
+          opacity: 0.7,
+        }}
       />
 
       <View style={styles.filter}>
         <Chip
           icon="sort"
-          style={styles.chip_unselected}
-          onPress={() => openDrawer('sort')}
+          style={[styles.chip, styles.chip_unselected]}
+          onPress={() => setDrawerVisible(true)}
         />
 
         <Chip
           icon="food-takeout-box"
-          style={styles.chip_unselected}
-          onPress={() => openDrawer('cuisine')}
+          style={[styles.chip, currentOption === 'cuisine' ? styles.chip_selected : styles.chip_unselected]}
+          onPress={() => setCurrentOption(currentOption === 'cuisine' ? '' : 'cuisine')}
         >
           Cuisine
         </Chip>
 
         <Chip
           icon="map-marker"
-          style={styles.chip_unselected}
-          onPress={() => openDrawer('distance')}
+          style={[styles.chip, currentOption === 'distance' ? styles.chip_selected : styles.chip_unselected]}
+          onPress={() => setCurrentOption(currentOption === 'distance' ? '' : 'distance')}
         >
           Distance
         </Chip>
 
         <Chip
           icon="check-decagram"
-          style={verifiedOnly ? styles.chip_selected : styles.chip_unselected}
+          style={[styles.chip, verifiedOnly ? styles.chip_selected : styles.chip_unselected]}
           onPress={() => setVerifiedOnly(!verifiedOnly)}
         >
           Verified
         </Chip>
       </View>
-      
+
+      <View>
+        {currentOption === 'distance' && (
+          <View style={{ alignItems: 'center' }}>
+            <Text>Listings within
+              <Text variant="titleLarge" style={{ fontWeight: "bold" }}> {displayDistance}m </Text> 
+              radius
+            </Text>
+            <Slider
+              style={{ width: "100%", height: 40 }}
+              minimumValue={50}
+              maximumValue={1000}
+              minimumTrackTintColor={theme.colors.primary}
+              maximumTrackTintColor={theme.colors.black}
+              value={selectedDistance}
+              step={50}
+              onValueChange={(value) => setDisplayDistance(value)}
+              onSlidingComplete={(value) => setSelectedDistance(value)}
+            />
+          </View>
+        )}
+
+        {currentOption === 'cuisine' && (
+          <View style={{alignItems: 'center'}}>
+            <Text>Select cuisines:</Text>
+            <View style={[styles.row, {justifyContent: 'center'}]}>
+              
+              {cuisines.map((category, index) => (
+                <Chip
+                  key={index}
+                  style={[
+                    styles.chip,
+                    selectedCuisines.includes(category) ? styles.chip_selected : styles.chip_unselected
+                  ]}
+                  onPress={() => handleCuisineChange(category)}
+                  showSelectedCheck={false}
+                >
+                  {category}
+                </Chip>
+              ))}
+            </View>
+          </View>
+        )}
+      </View>
+
+      <Divider />
+
       {listingData !== undefined ? (
       <View style={{flex: 1}}>
         <ScrollView vertical>
@@ -182,9 +245,7 @@ const Home = ({ navigation }) => {
         <ActivityIndicator />
       )}
 
-
-      <SortListingDrawer visible={drawerVisible && currentDrawer=='sort'} onClose={() => setDrawerVisible(false)} onSelectionChange={handleSortingChange} />
-      <FilterListingDrawer visible={drawerVisible && currentDrawer=='cuisine'} onClose={() => setDrawerVisible(false)} onSelectionChange={handleCuisineChange} />
+      <SortListingDrawer visible={drawerVisible} onClose={() => setDrawerVisible(false)} onSelectionChange={handleSortingChange} />
     </View>
   );
 }
