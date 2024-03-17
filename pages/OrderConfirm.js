@@ -1,16 +1,19 @@
 import { Text, TouchableOpacity, View, StyleSheet, Image, Animated, Touchable } from 'react-native'
 import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Button, useTheme } from 'react-native-paper';
+import { Dropdown } from "react-native-element-dropdown";
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 
 const OrderConfirm = ({ navigation, route }) => {
+    const theme = useTheme();
+    const [paymentMethod, setPaymentMethod] = React.useState("")
     const [isBuffering, setBuffering] = React.useState(false)
-    const [orderQuantity, setorderQuantity] = React.useState(1)
+    const [orderQuantity, setOrderQuantity] = React.useState(1)
     const {
-        key,
+        id,
         title,
         providerName,
         price,
@@ -19,29 +22,29 @@ const OrderConfirm = ({ navigation, route }) => {
         distance,
         thumbnailUrl,
         verifiedProvider
-    } = route.params
+    } = route.params;
+    
     const handleAddOrder = () => {
         if (orderQuantity < quantity) {
-            setorderQuantity(orderQuantity + 1)
+            setOrderQuantity(orderQuantity + 1)
         }
     }
     const handleRemoveOrder = () => {
         if (orderQuantity > 1) {
-            setorderQuantity(orderQuantity - 1)
+            setOrderQuantity(orderQuantity - 1)
         }
     }
     const curOrderNum = useQuery(api.order_number.getOrderNumber)
     const incrementOrderNumber = useMutation(api.order_number.incrementOrderNumber);
-    const updateListings = useMutation(api.listings.updateListings)
-    const deleteListing = useMutation(api.listings.deleteListing)
+    const updateListings = useMutation(api.listings.updateListings);
     const handleConfirmOrder = () => {
         setBuffering(true)
-        // Gives the user 8 seconds to cancel order
+        // Gives the user 5 seconds to cancel order
         setTimeout(() => {
-            incrementOrderNumber({id: "kh79ct164m3ejwbqcegn9wwg9s6ndnp7", num: curOrderNum})
+            incrementOrderNumber({id: "js76304gpwct76fa0mwqavtsys6ner5d", num: curOrderNum})
             // Updates or Deletes the listing according to the quantity
             updateListings({
-                id: key,
+                id: id,
                 column: "quantity",
                 input: quantity - orderQuantity,
             })
@@ -49,23 +52,23 @@ const OrderConfirm = ({ navigation, route }) => {
                 deleteListing({id: key})
             }
             navigation.navigate("PickUpConfirmation", route.params)
-        }, 1000)
+        }, 5000)
     }
     const handleCancelOrder = () => {
         setBuffering(false)
     }
     const ConfirmPickUpText = () => {
         return (
-            <TouchableOpacity style={[styles.confirmButton]} onPress={handleConfirmOrder}>
-                <Text style={{fontFamily: "Poppins", color: 'white', fontSize: 25}}>Confirm and Pick Up</Text>
-            </TouchableOpacity>
+            <Button mode='contained' style={styles.confirmButton} onPress={handleConfirmOrder}>
+                <Text style={{fontFamily: "Poppins", color: 'white'}}>Confirm Order</Text>
+            </Button>
         )
     }
     const BufferIndicator = () => {
         return (
             <View>
-                <View style={styles.confirmButton}>
-                    <Text style={{fontFamily: 'Poppins', fontSize: 25, color: 'white'}}>Sending Order</Text>
+                <View style={[styles.confirmButton, {flexDirection: 'row'}]}>
+                    <Text style={{fontFamily: 'Poppins', color: 'white'}}>Sending Order</Text>
                     <ActivityIndicator animating={true} color='white' size={35} style={{marginLeft: 10, marginBottom: 5}} />
                 </View>
                 <TouchableOpacity style={{alignItems: 'center'}} onPress={handleCancelOrder}>
@@ -74,6 +77,91 @@ const OrderConfirm = ({ navigation, route }) => {
             </View>
         )
     }
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+        },
+        topSection: {
+            flex: 0.4,
+            justifyContent: 'flex-end',
+            backgroundColor: '#2DCC70',
+        },
+        image: {
+            flex: 1,
+            width: '100%'
+        },
+        textContainer: {
+            position: 'absolute',
+            left: 15,
+            bottom: 15,
+            flexDirection: 'row',
+        },
+        verifiedIcon: {
+            width: 30,
+            height: 30,
+            marginLeft: 10,
+            marginTop: 4,
+            shadowColor: '#000', // Dont think the drop shadow works right now 
+            shadowOffset: { width: 0, height: 3 },
+            shadowRadius: 2,
+            shadowOpacity: 1,
+        },
+        provider: {
+            fontFamily: 'Poppins-Bold',
+            fontSize: 25,
+            color: "white",
+            textShadowColor: 'rgba(0, 0, 0, 1)', // Shadow color
+            textShadowOffset: { width: 1, height: 3 }, // Shadow offset
+            textShadowRadius: 10, // Shadow radius
+        },
+        bottomSection: {
+            flex: 0.7,
+            backgroundColor: 'white',
+            justifyContent: 'flex-start',
+            paddingHorizontal: 20, // Add horizontal padding to the bottom section
+            paddingVertical: 10, // Add vertical padding to the bottom section
+        },
+        foodTitle: {
+            fontFamily: 'Poppins',
+            fontSize: 30,
+            fontFamily: 'Poppins-Bold',
+            marginTop: 0,
+            marginBottom: 0
+        },
+        foodDescription: {
+            fontSize: 17,
+            fontFamily: 'Poppins-SemiBold',
+            marginBottom: 0,
+        },
+        availableTime: {
+            fontSize: 17,
+            color: 'black',
+            fontFamily: 'Poppins-SemiBold',
+        },
+        price: {
+            fontSize: 40,
+            fontFamily: 'Poppins-SemiBold',
+            color: theme.colors.secondary
+        },
+        foodQuantity: {
+            flexDirection: 'row',
+        }, 
+        foodTotalPrice: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+        },
+        confirmButton: {
+            alignItems: 'center',
+            marginTop: 10,
+            backgroundColor: theme.colors.primary,
+            borderRadius: 40,
+            marginTop: 10,
+            // padding: 12,
+            justifyContent: 'center',
+        }
+    })
+
     return (
         <View style={styles.container}>
             {/* The top green part */}
@@ -100,12 +188,12 @@ const OrderConfirm = ({ navigation, route }) => {
                 <Text style={styles.foodDescription}>Food Description</Text>
                 <Text style={styles.availableTime}>Availble Until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 <View style={styles.foodQuantity}>
-                    <Text style={styles.price}>${price}</Text>
+                    <Text style={styles.price}>${price.toFixed(2)}</Text>
                     <Text style={{fontSize: 25, marginTop: 15, fontFamily: 'Poppins-SemiBold'}}> x {orderQuantity}</Text>
                 </View>
                 <View style={styles.foodTotalPrice}>
                     <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 18, marginTop: 32, marginRight: 10}}>Total:</Text>
-                    <Text style={{ fontSize: 50, fontFamily: 'Poppins-Bold', color: '#00692C', marginRight: 60}}>${price * orderQuantity}</Text>
+                    <Text style={{ fontSize: 50, fontFamily: 'Poppins-Bold', color: '#00692C', marginRight: 60}}>${(price * orderQuantity).toFixed(2)}</Text>
                 </View>
                 {/* The part where we let user decides on the quantity to place */}
                 <View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: 50, alignContent: 'center'}}>
@@ -131,10 +219,16 @@ const OrderConfirm = ({ navigation, route }) => {
                     {orderQuantity === quantity && (
                         <Text style={{color: 'red', fontFamily: "Poppins"}}>Maximum quantity reached</Text>
                     )}
-                    {orderQuantity === 1 && (
-                        <Text style={{color: "red", fontFamily: 'Poppins'}}>Minimum quantity is 1</Text>
-                    )}
                 </View>
+
+                <Dropdown
+                    data={[{label: 'Cash', value: 'cash'}, {label: 'Wallet', value: 'wallet'}]}
+                    placeholder="Payment Method"
+                    labelField='label'
+                    valueField='value'
+                    value={paymentMethod}
+                    onChange={(value) => setPaymentMethod(value)}
+                />
                 {/* Confirm Order Button */}
                 <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                     {isBuffering ? <BufferIndicator /> : <ConfirmPickUpText />}
@@ -143,89 +237,4 @@ const OrderConfirm = ({ navigation, route }) => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    topSection: {
-        flex: 0.4,
-        justifyContent: 'flex-end',
-        backgroundColor: '#2DCC70',
-    },
-    image: {
-        flex: 1,
-        width: '100%'
-    },
-    textContainer: {
-        position: 'absolute',
-        left: 15,
-        bottom: 15,
-        flexDirection: 'row',
-    },
-    verifiedIcon: {
-        width: 30,
-        height: 30,
-        marginLeft: 10,
-        marginTop: 4,
-        shadowColor: '#000', // Dont think the drop shadow works right now 
-        shadowOffset: { width: 0, height: 3 },
-        shadowRadius: 2,
-        shadowOpacity: 1,
-    },
-    provider: {
-        fontFamily: 'Poppins-Bold',
-        fontSize: 25,
-        color: "white",
-        textShadowColor: 'rgba(0, 0, 0, 1)', // Shadow color
-        textShadowOffset: { width: 1, height: 3 }, // Shadow offset
-        textShadowRadius: 10, // Shadow radius
-    },
-    bottomSection: {
-        flex: 0.7,
-        backgroundColor: 'white',
-        justifyContent: 'flex-start',
-        paddingHorizontal: 20, // Add horizontal padding to the bottom section
-        paddingVertical: 10, // Add vertical padding to the bottom section
-    },
-    foodTitle: {
-        fontFamily: 'Poppins',
-        fontSize: 30,
-        fontFamily: 'Poppins-Bold',
-        marginTop: 0,
-        marginBottom: 0
-    },
-    foodDescription: {
-        fontSize: 17,
-        fontFamily: 'Poppins-SemiBold',
-        marginBottom: 0,
-    },
-    availableTime: {
-        fontSize: 17,
-        color: 'black',
-        fontFamily: 'Poppins-SemiBold',
-    },
-    price: {
-        fontSize: 40,
-        fontFamily: 'Poppins-SemiBold',
-        color: '#00692C'
-    },
-    foodQuantity: {
-        flexDirection: 'row',
-    }, 
-    foodTotalPrice: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    confirmButton: {
-        alignItems: 'center',
-        marginTop: 10,
-        backgroundColor: "#2DCC70",
-        borderRadius: 40,
-        marginTop: 10,
-        padding: 12,
-        justifyContent: 'center',
-        flexDirection: 'row'
-    }
-})
 export default OrderConfirm

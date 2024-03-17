@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, View, Image } from 'react-native';
-import { ActivityIndicator, Chip, Divider, Searchbar, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Chip, Divider, Icon, IconButton, Searchbar, Text, useTheme } from "react-native-paper";
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -121,6 +121,10 @@ const Home = ({ navigation }) => {
   //   setSelectedCuisines(values);
   // }
 
+  const AssetIcon = () => {
+    return <Icon icon={() => <Image source={require('../assets/add_listing_button.png')}/>}/> 
+  }
+
   const handleAddListing = () => {
     navigation.navigate("Create Listing")
   }
@@ -222,6 +226,7 @@ const Home = ({ navigation }) => {
               <ListingCard
                 navigation={navigation}
                 key={item._id}
+                id={item._id}
                 title={item.title}
                 sellerName={item.seller_name}
                 price={item.price}
@@ -236,8 +241,8 @@ const Home = ({ navigation }) => {
             <Text>No listings found</Text>
           )}
         </ScrollView>
-        <TouchableOpacity onPress={handleAddListing} style={{position:'absolute', right: 10, bottom: 20, justifyContent: 'center', alignItems: 'center'}}>
-          <Image style={{width: 85, height: 85}} source={require('../assets/add_listing_button.png')}/>
+        <TouchableOpacity onPress={handleAddListing} style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Image style={{width: 85, height: 85}} source={require('../assets/add_listing_button.png')} />
         </TouchableOpacity>
       </View>
       ) : (
