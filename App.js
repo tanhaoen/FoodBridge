@@ -17,6 +17,7 @@ import LocationProvider from "./components/LocationProvider";
 
 import OrderConfirm from "./pages/OrderConfirm";
 import PickUpConfirmation from "./pages/PickUpConfirmation";
+import ListingCreation from "./pages/ListingCreation";
 
 //auth//auth 
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
@@ -62,7 +63,8 @@ export default function App() {
 
               <Authenticated>
                 <Stack.Navigator> 
-                  <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false}}/>
+                  <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false, title: "Home"}}/>
+                  <Stack.Screen name="Create Listing" component={ListingCreation} options={{title: "Back to Home"}}/>
                   <Stack.Screen name="OrderConfirm" component={OrderConfirm} options={{title: 'Place Order'}}/>
                   <Stack.Screen name="PickUpConfirmation" component={PickUpConfirmation} options={{headerShown: false}}/>
                 </Stack.Navigator>

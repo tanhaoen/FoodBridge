@@ -3,6 +3,10 @@ import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { ActivityIndicator, Card } from 'react-native-paper';
 
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../convex/_generated/api";
+import { incrementOrderNumber } from '../convex/order_number';
+
 const OrderConfirm = ({ navigation, route }) => {
     const [isBuffering, setBuffering] = React.useState(false)
     const [orderQuantity, setorderQuantity] = React.useState(1)
@@ -26,10 +30,13 @@ const OrderConfirm = ({ navigation, route }) => {
             setorderQuantity(orderQuantity - 1)
         }
     }
+    const curOrderNum = useQuery(api.order_number.getOrderNumber)
+    const incrementOrderNumber = useMutation(api.order_number.incrementOrderNumber);
     const handleConfirmOrder = () => {
         setBuffering(true)
         // Gives the user 8 seconds to cancel order
         setTimeout(() => {
+            incrementOrderNumber({id: "kh79ct164m3ejwbqcegn9wwg9s6ndnp7", num: curOrderNum})
             navigation.navigate("PickUpConfirmation", route.params)
         }, 1000)
     }

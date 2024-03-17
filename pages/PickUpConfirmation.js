@@ -3,6 +3,9 @@ import * as React from 'react'
 import { ActivityIndicator, Card } from "react-native-paper";
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
+
 const PickUpConfirmation = ({ navigation, route }) => {
     const {
         title,
@@ -13,13 +16,14 @@ const PickUpConfirmation = ({ navigation, route }) => {
         distance,
         thumbnailUrl,
         verifiedProvider } = route.params;
+    const order_number = useQuery(api.order_number.getOrderNumber)
     const address = "1 Woodlands Square, #01 - 35 Causeway Point, Singapore 738099"
     const [isPaymentSucessful, setPaymentSuccessful] = React.useState(false)
     const handleBackToHome = async () => {
         setPaymentSuccessful(true)
         setTimeout(() => {
             navigation.navigate("HomePage")
-        }, 5000)
+        }, 1000)
     }
     const Buffering = () => {
         return (
@@ -51,7 +55,7 @@ const PickUpConfirmation = ({ navigation, route }) => {
             <View style={{alignItems: 'center', justifyContent: 'center', padding: 30}}>
                 <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 25, padding: 10}}>Your order is ready!</Text>
                 <Text style={{fontFamily: 'Poppins-Regular', fontSize: 20, padding: 10}}>Pick up number is</Text>
-                <Text style={{fontFamily: 'Poppins', fontSize: 40, color: '#00692C', padding: 15}}>ORDER_NUMBER</Text>
+                <Text style={{fontFamily: 'Poppins', fontSize: 40, color: '#00692C', padding: 15}}>{order_number}</Text>
                 <Text style={{fontFamily: 'Poppins', fontSize: 25}}>Collect by {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} at </Text>
                 <TouchableOpacity onPress={handleAddressPress}>
                     <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>{address}</Text>

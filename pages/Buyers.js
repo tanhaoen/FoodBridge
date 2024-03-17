@@ -1,7 +1,7 @@
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-import { calculateDistance} from "../utils";
+// import { calculateDistance} from "../utils";
 
 import React from "react";
 import { Image, RefreshControl, ScrollView, View } from "react-native";
@@ -30,7 +30,7 @@ export default function Buyers() {
 
 			if (location !== undefined) {
 				temp = temp.map((item) => {
-					item.distance = calculateDistance(item.buyer_location.latitude, item.buyer_location.longitude, item.listing_location.latitude, item.listing_location.longitude);
+					item.distance = 40;// calculateDistance(item.buyer_location.latitude, item.buyer_location.longitude, item.listing_location.latitude, item.listing_location.longitude);
 					return item;
 				});
 				return temp;
@@ -57,7 +57,7 @@ export default function Buyers() {
 				</>
 				) : (
 				<View style={{alignItems: 'center'}}>
-					<Image source={require("../assets/basket.png")} />
+					{/*<Image source={require("../assets/basket.png")} />*/}
 					<Text>No orders found!</Text>
 				</View>
 				)}

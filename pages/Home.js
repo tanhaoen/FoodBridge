@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, Image } from 'react-native';
 import { ActivityIndicator, Chip, Searchbar, Text, useTheme } from "react-native-paper";
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-import { calculateDistance} from "../utils";
+// import { calculateDistance} from "../utils";
 
 import SortListingDrawer from "../components/SortListingDrawer";
 import FilterListingDrawer from "../components/FilterListingDrawer";
 import ListingCard from "../components/ListingCard";
 import { LocationContext } from "../components/LocationProvider";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Home = ({ navigation }) => {
   const theme = useTheme();
@@ -32,7 +33,7 @@ const Home = ({ navigation }) => {
 
       if (location !== undefined && location !== null) {
         temp = temp.map((item) => {
-          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          item.distance = 40//calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;
         });
       }
@@ -102,9 +103,13 @@ const Home = ({ navigation }) => {
   const handleCuisineChange = (values) => {
     setSelectedCuisines(values);
   }
+
+  const handleAddListing = () => {
+    navigation.navigate("Create Listing")
+  }
   
   return (
-    <View style={{ marginHorizontal: 16, marginTop: 10 }}>
+    <View style={{ marginHorizontal: 16, marginTop: 10, flex: 1 }}>
       <Searchbar
       placeholder="Search"
       onChangeText={setSearchQuery}
@@ -148,6 +153,7 @@ const Home = ({ navigation }) => {
       </View>
       
       {listingData !== undefined ? (
+      <View style={{flex: 1}}>
         <ScrollView vertical>
           {listingData.length > 0 ? (
             results.map((item, index) => (
@@ -168,6 +174,10 @@ const Home = ({ navigation }) => {
             <Text>No listings found</Text>
           )}
         </ScrollView>
+        <TouchableOpacity onPress={handleAddListing} style={{position:'absolute', right: 10, bottom: 20, justifyContent: 'center', alignItems: 'center'}}>
+          <Image style={{width: 85, height: 85}} source={require('../assets/add_listing_button.png')}/>
+        </TouchableOpacity>
+      </View>
       ) : (
         <ActivityIndicator />
       )}

@@ -35,7 +35,7 @@ export default function SignInScreen() {
 
     const navigation = useNavigation();
 
-    const onSignInPress = async () => {
+    const onSignInPress = async () => { 
       if (!isLoaded) {
         return;
       }
@@ -51,7 +51,7 @@ export default function SignInScreen() {
       } catch (err) {
         console.log(err);
       }
-};
+    };
 
 
     return (

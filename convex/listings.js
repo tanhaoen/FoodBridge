@@ -14,12 +14,12 @@ export const queryListings = query({
       .filter((q) => q.neq(q.field("seller_id"), args.user_id))
       .collect();
 
-    console.log(listings);
+    //console.log(listings);
 
     const results = await Promise.all(listings.map(async (listing) => {
       const user = await ctx.db.get(listing.seller_id);
 
-      console.log(user);
+      //console.log(user);
 
       if (user !== null && user !== undefined) {
           return {
@@ -79,11 +79,11 @@ export const updateListings = mutation({
     const { id } = args;
     
     //before change
-    console.log(await ctx.db.get(id));
+    //console.log(await ctx.db.get(id));
 
     // after change:
     await ctx.db.patch(id, {[args.column]: args.input});
-    console.log(await ctx.db.get(id));
+    //console.log(await ctx.db.get(id));
 
   },
 });
