@@ -1,16 +1,16 @@
 import { Text, TouchableOpacity, View, StyleSheet, Image, Animated, Touchable } from 'react-native'
 import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { ActivityIndicator, Card } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { incrementOrderNumber } from '../convex/order_number';
 
 const OrderConfirm = ({ navigation, route }) => {
     const [isBuffering, setBuffering] = React.useState(false)
     const [orderQuantity, setorderQuantity] = React.useState(1)
     const {
+        key,
         title,
         providerName,
         price,
@@ -32,11 +32,22 @@ const OrderConfirm = ({ navigation, route }) => {
     }
     const curOrderNum = useQuery(api.order_number.getOrderNumber)
     const incrementOrderNumber = useMutation(api.order_number.incrementOrderNumber);
+    const updateListings = useMutation(api.listings.updateListings)
+    const deleteListing = useMutation(api.listings.deleteListing)
     const handleConfirmOrder = () => {
         setBuffering(true)
         // Gives the user 8 seconds to cancel order
         setTimeout(() => {
             incrementOrderNumber({id: "kh79ct164m3ejwbqcegn9wwg9s6ndnp7", num: curOrderNum})
+            // Updates or Deletes the listing according to the quantity
+            updateListings({
+                id: key,
+                column: "quantity",
+                input: quantity - orderQuantity,
+            })
+            if (quantity - orderQuantity <= 0) {
+                deleteListing({id: key})
+            }
             navigation.navigate("PickUpConfirmation", route.params)
         }, 1000)
     }

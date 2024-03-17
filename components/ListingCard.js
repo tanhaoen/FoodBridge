@@ -3,7 +3,6 @@ import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
 const ListingCard = ({navigation, ...props}) => {
-  console.log("hihihi")
     const theme = useTheme();
     const {
       key,
