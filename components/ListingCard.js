@@ -5,6 +5,7 @@ import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-n
 const ListingCard = ({navigation, ...props}) => {
     const theme = useTheme();
     const {
+      key,
       title,
       sellerName,
       price,

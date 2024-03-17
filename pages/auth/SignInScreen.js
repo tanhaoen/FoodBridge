@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 		marginVertical: 4,
 		height: 50,
 		borderWidth: 1,
-		borderColor: '#6c47ff',
+		borderColor: '#2DCC70',
 		borderRadius: 4,
 		padding: 10,
 		backgroundColor: '#fff'
@@ -76,11 +76,11 @@ export default function SignInScreen() {
           />
         </View>
       <View>
-        {/* <TouchableOpacity onPress={onSignInPress}>
-          <Text>Sign in</Text>
-        </TouchableOpacity> */}
-
-        <Button onPress={onSignInPress} title="Sign In" color={'#6c47ff'}></Button>
+        <View style={{alignItems: 'center'}}>  
+          <TouchableOpacity onPress={onSignInPress} style={{backgroundColor: '#2DCC70', borderRadius: 30, alignItems: 'center', marginTop: 10}}>
+            <Text style={{color: 'white', fontFamily: 'Poppins-Regular', fontSize: 20, paddingHorizontal: 50, padding: 10}}>Sign in</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* <Link href="/reset" asChild>
 				<Pressable style={styles.button}>
@@ -88,9 +88,12 @@ export default function SignInScreen() {
 				</Pressable>
 			</Link> */}
 			{/* <Link href="/SignUpScreen" asChild> */}
-				<Pressable style={styles.button} onPress={() => navigation.navigate(SignUpScreen)}>
-					<Text>Create Account</Text>
+      <View style={{alignItems: 'center'}}>
+				<Pressable style={[styles.button, {flexDirection: 'row'}]} onPress={() => navigation.navigate(SignUpScreen)}>
+          <Text style={{fontFamily: 'Poppins-Regular'}}>Do not have an account? </Text>
+					<Text style={{fontFamily: 'Poppins-Regular', color: '#2DCC70'}}>Sign Up</Text>
 				</Pressable>
+      </View>
 			{/* </Link> */}
       </View>
     </View>

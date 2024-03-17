@@ -37,7 +37,7 @@ const Home = ({ navigation }) => {
 
       if (location !== undefined && location !== null) {
         temp = temp.map((item) => {
-          item.distance = 40//calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;
         });
       }
@@ -117,9 +117,9 @@ const Home = ({ navigation }) => {
     }
   }
 
-  const handleCuisineChange = (values) => {
-    setSelectedCuisines(values);
-  }
+  // const handleCuisineChange = (values) => {
+  //   setSelectedCuisines(values);
+  // }
 
   const handleAddListing = () => {
     navigation.navigate("Create Listing")
