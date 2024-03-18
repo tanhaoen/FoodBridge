@@ -11,7 +11,7 @@ import { LocationContext } from "../components/LocationProvider";
 
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
-const ListingCreation = ({ navigation, route }) => {
+const ListingCreation = ({ navigation, ...props }) => {
     // Modal related variables
     const theme = useTheme();
     const [fontsLoaded] = useFonts({
@@ -50,7 +50,7 @@ const ListingCreation = ({ navigation, route }) => {
         await addListing({
             title: foodTitle,
             description: foodDesc,
-            seller_id: route.params.seller_id,
+            seller_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7",
             price: price,
             quantity: quantity,
             expiry_time: Math.floor(expiryDateTime.getTime()),

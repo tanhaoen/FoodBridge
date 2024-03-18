@@ -140,7 +140,7 @@ const Home = ({ navigation }) => {
   }
 
   const handleAddListing = () => {
-    navigation.navigate("Create Listing")
+    navigation.navigate("Create Listing", { user_id: USERID })
   }
   return (
     <View style={{ marginHorizontal: 16, marginTop: 10, flex: 1 }}>
