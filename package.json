@@ -20,6 +20,7 @@
     "convex": "^1.10.0",
     "expo": "~50.0.7",
     "expo-font": "~11.10.3",
+    "expo-image-picker": "^14.7.1",
     "expo-location": "~16.5.5",
     "expo-status-bar": "~1.11.1",
     "expo-web-browser": "^12.8.2",

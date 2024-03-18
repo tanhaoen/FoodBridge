@@ -28,7 +28,6 @@ export default function Buyers() {
 	const results = React.useMemo(() => {
 		if (orderData !== undefined) {
 			let temp = orderData;
-
 			if (location !== undefined) {
 				temp = temp.map((item) => {
 					item.distance = 5;
@@ -39,7 +38,6 @@ export default function Buyers() {
 			}
 		}
 	}, [orderData, location]);
-
 	return (
 		<View style={{ paddingHorizontal: 16, paddingTop: 30, flex: 1, backgroundColor: theme.colors.background }}>
 			{orderData !== undefined ? (
@@ -62,7 +60,7 @@ export default function Buyers() {
 				</>
 				) : (
 				<View style={{alignItems: 'center'}}>
-					{/* <Image source={require("../assets/basket.png")} /> */}
+					<Image source={require("../assets/basket.png")} />
 					<Text>No orders found!</Text>
 				</View>
 				)}

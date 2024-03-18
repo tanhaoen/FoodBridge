@@ -16,8 +16,8 @@ import type {
 } from "convex/server";
 import type * as crons from "../crons.js";
 import type * as listings from "../listings.js";
-import type * as order_number from "../order_number.js";
 import type * as orders from "../orders.js";
+import type * as order_number from "../order_number.js";
 import type * as users from "../users.js";
 
 /**
@@ -31,8 +31,8 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   listings: typeof listings;
-  order_number: typeof order_number;
   orders: typeof orders;
+  order_number: typeof order_number;
   users: typeof users;
 }>;
 export declare const api: FilterApi<
