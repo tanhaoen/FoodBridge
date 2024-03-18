@@ -17,6 +17,7 @@ import LocationProvider from "./components/LocationProvider";
 
 import OrderConfirm from "./pages/OrderConfirm";
 import PickUpConfirmation from "./pages/PickUpConfirmation";
+import ListingCreation from "./pages/ListingCreation";
 
 //auth
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
@@ -36,6 +37,7 @@ export default function App() {
 
   let [fontsLoaded] = useFonts({
     "Poppins" : require('./assets/fonts/Poppins-Black.ttf'),
+    "Poppins-Regular": require('./assets/fonts/Poppins-Regular.ttf'),
     "Poppins-Bold": require('./assets/fonts/Poppins-Bold.ttf'),
     "Poppins-SemiBold": require('./assets/fonts/Poppins-SemiBold.ttf')
   })
@@ -52,16 +54,17 @@ export default function App() {
             <NavigationContainer>
               <LocationProvider>
 
-              <Unauthenticated>
+              {/* <Unauthenticated>
                 <Stack.Navigator>
                   <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
                   <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
                 </Stack.Navigator>
-              </Unauthenticated>
+              </Unauthenticated> */}
 
               <Authenticated>
                 <Stack.Navigator> 
-                  <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false}}/>
+                  <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false, title: "Home"}}/>
+                  <Stack.Screen name="Create Listing" component={ListingCreation} options={{title: "Create Listing"}}/>
                   <Stack.Screen name="OrderConfirm" component={OrderConfirm} options={{title: 'Place Order'}}/>
                   <Stack.Screen name="PickUpConfirmation" component={PickUpConfirmation} options={{headerShown: false}}/>
                 </Stack.Navigator>

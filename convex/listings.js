@@ -14,12 +14,12 @@ export const queryListings = query({
       .filter((q) => q.neq(q.field("seller_id"), args.user_id))
       .collect();
 
-    console.log(listings);
+    //console.log(listings);
 
     const results = await Promise.all(listings.map(async (listing) => {
       const user = await ctx.db.get(listing.seller_id);
 
-      console.log(user);
+      //console.log(user);
 
       if (user !== null && user !== undefined) {
           return {
@@ -34,37 +34,39 @@ export const queryListings = query({
   }
 });
 
-
-// ============ UNUSED FUNCTIONS ============
 export const addListings = mutation({
   args: {
     title: v.string(), 
     description: v.string(), 
-    provider_name: v.string(), 
-    verified_provider: v.boolean(), 
-    price: v.number(), 
-    quantity: v.number(), 
+    seller_id: v.id("users"),
+    price: v.number(),
+    quantity: v.number(),
     expiry_time: v.number(),
     categories: v.array(v.string()), //list in alphabetical order
-    thumbnail_url: v.string(), 
-    address: v.string()
+    thumbnail_url: v.string(),
+    location: v.object({
+      latitude: v.number(),
+      longitude: v.number()
+    })
   },
   handler: async (ctx, args) => {
     // insert a new document into the listings table
     return await ctx.db.insert("listings", {
       title: args.title,
       description: args.description,
-      provider_name: args.provider_name,
-      verified_provider: args.verified_provider,
+      seller_id: args.seller_id,
       price: args.price,
       quantity: args.quantity,
       expiry_time: args.expiry_time,
       categories: args.categories,
       thumbnail_url: args.thumbnail_url,
-      address: args.address
+      address: args.address,
+      location: args.location
     });
   }
 });
+
+// ============ UNUSED FUNCTIONS ============
 
 export const updateListings = mutation({
     //parameters for the mutation
@@ -79,11 +81,11 @@ export const updateListings = mutation({
     const { id } = args;
     
     //before change
-    console.log(await ctx.db.get(id));
+    //console.log(await ctx.db.get(id));
 
     // after change:
     await ctx.db.patch(id, {[args.column]: args.input});
-    console.log(await ctx.db.get(id));
+    //console.log(await ctx.db.get(id));
 
   },
 });

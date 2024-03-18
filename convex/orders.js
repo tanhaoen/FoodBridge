@@ -60,11 +60,11 @@ export const updateOrders = mutation({
         const { id } = args;
         
         //before change
-        console.log(await ctx.db.get(id));
+        //console.log(await ctx.db.get(id));
 
         // after change:
         await ctx.db.patch(id, {[args.column]: args.input});
-        console.log(await ctx.db.get(id));
+        //console.log(await ctx.db.get(id));
 
     },
 });

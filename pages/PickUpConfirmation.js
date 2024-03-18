@@ -1,7 +1,10 @@
 import { View, StyleSheet, TouchableOpacity, Text, Linking } from "react-native";
 import * as React from 'react'
-import { ActivityIndicator, Card } from "react-native-paper";
+import { ActivityIndicator, Button, Card } from "react-native-paper";
 import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
 
 const PickUpConfirmation = ({ navigation, route }) => {
     const {
@@ -13,13 +16,14 @@ const PickUpConfirmation = ({ navigation, route }) => {
         distance,
         thumbnailUrl,
         verifiedProvider } = route.params;
+    const order_number = useQuery(api.order_number.getOrderNumber)
     const address = "1 Woodlands Square, #01 - 35 Causeway Point, Singapore 738099"
     const [isPaymentSucessful, setPaymentSuccessful] = React.useState(false)
     const handleBackToHome = async () => {
         setPaymentSuccessful(true)
         setTimeout(() => {
             navigation.navigate("HomePage")
-        }, 5000)
+        }, 1000)
     }
     const Buffering = () => {
         return (
@@ -33,9 +37,9 @@ const PickUpConfirmation = ({ navigation, route }) => {
     const OrderCollectedButton = () => {
         return (
             <View style={{justifyContent: 'flex-end', padding: 30, flex: 1, alignItems: 'center'}}>
-                <TouchableOpacity onPress={handleBackToHome} style={styles.OrderCollectedButton}>
-                    <Text style={{color: 'white', fontSize: 20, fontFamily: 'Poppins'}}>Order Collected</Text>
-                </TouchableOpacity>
+                <Button mode='contained' style={styles.OrderCollectedButton} onPress={handleBackToHome}>
+                    <Text style={{color: 'white', fontFamily: 'Poppins'}}>Order Collected</Text>
+                </Button>
             </View>
         )
     }
@@ -49,21 +53,13 @@ const PickUpConfirmation = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={{alignItems: 'center', justifyContent: 'center', padding: 30}}>
-                <Text style={{fontFamily: 'Poppins-Bold', fontSize: 25}}>Your order is ready!</Text>
-                <Text style={{fontFamily: 'Poppins-Bold', fontSize: 20}}>Pick up number is</Text>
-                <Text style={{fontFamily: 'Poppins', fontSize: 40, color: '#00692C'}}>ORDER_NUMBER</Text>
+                <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 25, padding: 10}}>Your order is ready!</Text>
+                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 20, padding: 10}}>Pick up number is</Text>
+                <Text style={{fontFamily: 'Poppins', fontSize: 40, color: '#00692C', padding: 15}}>{order_number}</Text>
                 <Text style={{fontFamily: 'Poppins', fontSize: 25}}>Collect by {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} at </Text>
                 <TouchableOpacity onPress={handleAddressPress}>
                     <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 30}}>{address}</Text>
                 </TouchableOpacity>
-            </View>
-            {/* Payment details */}
-            <View style={{alignItems: 'flex-start', paddingLeft: 30}}>
-                <Text style={{fontFamily: 'Poppins', fontSize: 25, paddingLeft: 0}}>Payment Details</Text>
-                <View style={{flexDirection: 'row', marginTop: 20}}>
-                    <Ionicons name={"logo-paypal"} size={30} color={'#2DCC70'} />
-                    <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 20, marginLeft: 10}}>**57</Text>
-                </View>
             </View>
             {isPaymentSucessful ? <Buffering /> : <OrderCollectedButton />}
         </View>
@@ -74,7 +70,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 80,
-        //alignItems: 'center'
+        alignItems: 'center'
     },
     OrderCollectedButton : {
         backgroundColor: '#2DCC70',

@@ -18,7 +18,9 @@ export default defineSchema({
             longitude: v.number()
         }))
     }),
-
+    order_number: defineTable({
+        order_number: v.number()
+    }),
     orders: defineTable({
         listings_id : v.id("listings"),
         seller_id : v.id("users"),

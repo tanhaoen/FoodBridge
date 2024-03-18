@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 		marginVertical: 4,
 		height: 50,
 		borderWidth: 1,
-		borderColor: '#6c47ff',
+		borderColor: '#2DCC70',
 		borderRadius: 4,
 		padding: 10,
 		backgroundColor: '#fff'
@@ -119,14 +119,11 @@ export default function SignUpScreen() {
             />
           </View>
  
-          {/* <TouchableOpacity onPress={onSignUpPress}>
-            <Text>Sign up</Text>
-          </TouchableOpacity> */}
-          <Button
-            title="Sign up"
-            onPress={onSignUpPress}
-            color={'#6c47ff'}
-            style={styles.button}></Button>
+          <View style={{alignItems: 'center'}}>  
+            <TouchableOpacity onPress={onSignUpPress} style={{backgroundColor: '#2DCC70', borderRadius: 30, alignItems: 'center', padding: 0}}>
+              <Text style={{color: 'white', fontFamily: 'Poppins-Regular', fontSize: 20, paddingHorizontal: 50, padding: 10}}>SIGN UP</Text>
+            </TouchableOpacity>
+          </View> 
         </View>
       )}
       {pendingVerification && (

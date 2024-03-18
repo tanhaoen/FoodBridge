@@ -5,14 +5,15 @@ import { api } from "../convex/_generated/api";
 
 import React from "react";
 import { Image, RefreshControl, ScrollView, View } from "react-native";
-import { ActivityIndicator, Button, Text } from "react-native-paper";
-import BuyerCard from "../components/BuyerCard";
+import { ActivityIndicator, Button, Icon, List, Text, useTheme } from "react-native-paper";
 import { LocationContext } from "../components/LocationProvider";
 
 export default function Buyers() {
 
 	const { location, errorMsg } = React.useContext(LocationContext);
 	const [refreshing, setRefreshing] = React.useState(false);
+
+	const theme = useTheme();
 
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -40,21 +41,24 @@ export default function Buyers() {
 	}, [orderData, location]);
 
 	return (
-		<View style={{ marginHorizontal: 16, marginTop: 30, flex: 1 }}>
+		<View style={{ paddingHorizontal: 16, paddingTop: 30, flex: 1, backgroundColor: theme.colors.background }}>
 			{orderData !== undefined ? (
 			<ScrollView vertical style={{ flex: 1 }}>
 				{orderData.length > 0 ? (
 				<>
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-					{orderData.map((order, index) => (
-					<BuyerCard
-						key={index}
-						buyerName={order.buyer_name}
-						distance={order.distance}
-						item={order.item}
-						quantity={order.quantity}
-					/>
-					))}
+					<List.Section>
+						{orderData.map((order, index) => (
+						<List.Item
+							key={index}
+							title={`${order.item} x ${order.quantity}`}
+							description={order.buyer_name}
+							left={props => <Icon source={order.payment_method=="cash" ? "cash" : "wallet"} size={35} color={theme.colors.primary} />}
+							right={props => <View><Text>{order.distance}m</Text><Text>{order.eta} minutes away</Text></View>}
+							style={{borderBottomWidth: 1, borderBottomColor: "#EEEEEE"}}
+						/>
+						))}
+					</List.Section>
 				</>
 				) : (
 				<View style={{alignItems: 'center'}}>
