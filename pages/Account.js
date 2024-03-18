@@ -5,11 +5,12 @@ import { Image, TouchableOpacity, StyleSheet, View } from "react-native";
 import { Avatar, Banner, Button, Icon, List, RadioButton, Text, TextInput, useTheme } from "react-native-paper";
 
 //auth
-import { ClerkProvider, SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
+import { ClerkProvider, SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
 import SignInScreen from "./auth/SignInScreen";
 
 export default function Account() {
 	//auth
+	const { isSignedIn, user } = useUser();
 	const { isLoaded, signOut} = useAuth();
 	const SignOut = () => {
 
@@ -132,7 +133,7 @@ export default function Account() {
 			<>
 			<View style={styles.jumbotron}>
 				<View style={styles.jumbotron_info_group}>
-					<Text variant="headlineMedium" style={{color: 'white', fontWeight: 'bold'}}>{userData.firstName} {userData.lastName}</Text>
+					<Text variant="headlineMedium" style={{color: 'white', fontWeight: 'bold'}}>{user.firstName} {user.lastName}</Text>
 					<View style={{flexDirection: 'row'}}>
 						<Text variant="titleMedium" style={{color: 'white', marginBottom: 7}}>@{userData.username}</Text>
 						{userData.verified ? (

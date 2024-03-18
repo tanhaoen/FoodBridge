@@ -65,7 +65,7 @@ const ListingCreation = ({ navigation, ...props }) => {
         setVisible(true)
     }
     // Stores the selected image URI 
-    const [file, setFile] = React.useState(null); 
+    const [file, setFile] = React.useState(""); 
 
     // Stores any error message 
     const [error, setError] = React.useState(null); 
@@ -189,13 +189,13 @@ const ListingCreation = ({ navigation, ...props }) => {
                             <Text variant="titleMedium">Available until</Text>
                             <Text>Maximum 2 hours later</Text>
                         </View>
-                        {/* <RNDateTimePicker
+                        <RNDateTimePicker
                             mode="datetime"
                             value={expiryDateTime}
                             minimumDate={today}
                             maximumDate={maxDate}
                             onChange={(event, value) => setExpiryDateTime(value)}
-                        /> */}
+                        />
                     </View>
                     
                     {/*Skipped implementing the photo upload section due to time constraints*/}

@@ -46,7 +46,7 @@ const ListingCard = ({navigation, ...props}) => {
                 {verified && (<Icon source='check-decagram' color='blue' />)}
               </View>
               {price <= 0 && (
-                <Text variant='Medium' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>FREE</Text>  
+                <Text variant='titleMedium' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>FREE</Text>  
               )}
               {price > 0 && (
                 <Text variant='titleMedium' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price.toFixed(2)}</Text>

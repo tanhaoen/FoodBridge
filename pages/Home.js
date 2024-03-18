@@ -144,7 +144,7 @@ const Home = ({ navigation }) => {
   }
   return (
     <View style={{ marginHorizontal: 16, marginTop: 10, flex: 1 }}>
-      <Searchbar
+      {/* <Searchbar
         placeholder="Search"
         onChangeText={setSearchQuery}
         value={searchQuery}
@@ -152,7 +152,7 @@ const Home = ({ navigation }) => {
           backgroundColor: theme.colors.light,
           opacity: 0.7,
         }}
-      />
+      /> */}
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filter}>
         <Chip
