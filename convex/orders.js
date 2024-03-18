@@ -3,16 +3,20 @@ import { mutation, query } from "./_generated/server";
 
 // ============ USED FUNCTIONS ============
 export const addOrders = mutation({
-    args: { 
-        listings_id : v.number(),
+    args: {
+        buyer_id : v.id("users"), 
+        listings_id : v.id("listings"),
         quantity : v.number(),
-        order_status : v.string()
+        seller_id : v.id("users"),
+        order_number : v.number(),
     },
     handler: async (ctx, args) => {
         return await ctx.db.insert("orders", {
-            listings_id : args.listings_id,
-            quantity : args.quantity,
-            order_status : args.order_status,
+            buyer_id: args.buyer_id,
+            listings_id: args.listings_id,
+            quantity: args.quantity,
+            seller_id: args.seller_id,
+            order_number: args.order_number
         });
     }
 });
@@ -37,7 +41,8 @@ export const queryOrders = query({
                     buyer_location: buyer.location,
                     listing_location: listing.location,
                     item: listing.title,
-                    quantity: order.quantity
+                    quantity: order.quantity,
+                    order_number: order.order_number,
                 };
             }
         }));

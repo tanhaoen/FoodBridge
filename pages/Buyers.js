@@ -1,7 +1,7 @@
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-//import { calculateDistance} from "../utils";
+import { calculateDistance} from "../utils";
 
 import React from "react";
 import { Image, RefreshControl, ScrollView, View } from "react-native";
@@ -30,8 +30,8 @@ export default function Buyers() {
 			let temp = orderData;
 			if (location !== undefined) {
 				temp = temp.map((item) => {
-					item.distance = 5;
-					//item.distance = calculateDistance(item.buyer_location.latitude, item.buyer_location.longitude, item.listing_location.latitude, item.listing_location.longitude);
+					item.distance = calculateDistance(item.buyer_location.latitude, item.buyer_location.longitude, item.listing_location.latitude, item.listing_location.longitude);
+					item.eta = Math.floor((item.distance / 80) * 2);
 					return item;
 				});
 				return temp;
@@ -40,19 +40,21 @@ export default function Buyers() {
 	}, [orderData, location]);
 	return (
 		<View style={{ paddingHorizontal: 16, paddingTop: 30, flex: 1, backgroundColor: theme.colors.background }}>
-			{orderData !== undefined ? (
+			{results !== undefined ? (
 			<ScrollView vertical style={{ flex: 1 }}>
-				{orderData.length > 0 ? (
+				{results.length > 0 ? (
 				<>
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 					<List.Section>
-						{orderData.map((order, index) => (
+						{results.map((order, index) => (
 						<List.Item
 							key={index}
 							title={`${order.item} x ${order.quantity}`}
+							titleStyle={{fontFamily: 'Poppins-Medium'}}
 							description={order.buyer_name}
-							left={props => <Icon source={order.payment_method=="cash" ? "cash" : "wallet"} size={35} color={theme.colors.primary} />}
-							right={props => <View><Text>{order.distance}m</Text><Text>{order.eta} minutes away</Text></View>}
+							descriptionStyle={{fontFamily: 'Poppins-Regular'}}
+							left={props => <Text variant='headlineLarge' style={{color: theme.colors.secondary, fontFamily: 'Poppins-SemiBold'}}>{order.order_number}</Text>}
+							right={props => <View><Text style={{fontFamily: 'Poppins-Regular'}}>{order.distance}m away</Text><Text>{order.eta} minutes away</Text></View>}
 							style={{borderBottomWidth: 1, borderBottomColor: "#EEEEEE"}}
 						/>
 						))}

@@ -8,8 +8,8 @@ export const resetOrderNumber = mutation(async (ctx) => {
 export const getOrderNumber = query({
     args: {},
     handler: async (ctx) => {
-      const result = await ctx.db.query("order_number").collect();
-      return result[0].order_number;
+      const result = await ctx.db.query("order_number").first();
+      return result;
     },
 });
 

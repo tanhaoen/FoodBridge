@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, View, Image } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { ActivityIndicator, Chip, Divider, Icon, IconButton, Searchbar, Text, useTheme } from "react-native-paper";
+
+import { useFonts } from 'expo-font';
+import { ClerkProvider, SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-//import { calculateDistance} from "../utils";
+import { calculateDistance} from "../utils";
 
 import Slider from '@react-native-community/slider';
 
@@ -15,12 +18,18 @@ import { LocationContext } from "../components/LocationProvider";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Home = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Medium" : require('../assets/fonts/Poppins-Medium.ttf'),
+    "Poppins-Light" : require('../assets/fonts/Poppins-Light.ttf'),
+    "Poppins-Regular" : require('../assets/fonts/Poppins-Regular.ttf'),
+  })
+
   const theme = useTheme();
   const { location, errorMsg } = React.useContext(LocationContext);
 
   const cuisines = ["Chinese", "Malay", "Indian", "Western", "Korean", "Thai", "Japanese"]
 
-  const [searchQuery, setSearchQuery] = React.useState('')
+  const [searchQuery, setSearchQuery] = React.useState("");
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [currentOption, setCurrentOption] = React.useState('');
   const [selectedSorting, setSelectedSorting] = React.useState({ field: "_creationTime", order: "desc" });
@@ -29,16 +38,19 @@ const Home = ({ navigation }) => {
   const [selectedDistance, setSelectedDistance] = React.useState(1000);
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
-  const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7" });
+  const { isSignedIn, user } = useUser();
+
+  const USERID = useQuery(api.users.getUserID, { first_name: user.firstName });
+
+  const listingData = useQuery(api.listings.queryListings, { user_id: USERID, search_query: searchQuery });
 
   const results = React.useMemo(() => {
-    if (listingData !== undefined) {
+    if (listingData !== undefined && listingData !== null) {
       let temp = listingData;
 
       if (location !== undefined && location !== null) {
         temp = temp.map((item) => {
-          item.distance = 5;
-          //item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;
         });
       }
@@ -96,7 +108,8 @@ const Home = ({ navigation }) => {
     filter: {
       marginBottom: 25,
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      flexGrow: 0,
     },
     row : {
       flexDirection: 'row',
@@ -127,7 +140,7 @@ const Home = ({ navigation }) => {
   }
 
   const handleAddListing = () => {
-    navigation.navigate("Create Listing")
+    navigation.navigate("Create Listing", { user_id: USERID })
   }
   return (
     <View style={{ marginHorizontal: 16, marginTop: 10, flex: 1 }}>
@@ -141,7 +154,7 @@ const Home = ({ navigation }) => {
         }}
       />
 
-      <View style={styles.filter}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filter}>
         <Chip
           icon="sort"
           style={[styles.chip, styles.chip_unselected]}
@@ -171,7 +184,7 @@ const Home = ({ navigation }) => {
         >
           Verified
         </Chip>
-      </View>
+      </ScrollView>
 
       <View>
         {currentOption === 'distance' && (
@@ -221,8 +234,8 @@ const Home = ({ navigation }) => {
 
       {listingData !== undefined ? (
       <View style={{flex: 1}}>
-        <ScrollView vertical>
-          {listingData.length > 0 ? (
+        <ScrollView vertical showsVerticalScrollIndicator={false}>
+          {listingData !== undefined && listingData !== null && listingData.length > 0 ? (
             results.map((item, index) => (
               <ListingCard
                 navigation={navigation}
@@ -230,7 +243,9 @@ const Home = ({ navigation }) => {
                 _id={item._id}
                 title={item.title}
                 description={item.description}
+                sellerId={item.seller_id}
                 sellerName={item.seller_name}
+                buyerId={USERID}
                 price={item.price}
                 quantity={item.quantity}
                 expiryTime={item.expiry_time}

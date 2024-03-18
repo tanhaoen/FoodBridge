@@ -3,18 +3,23 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Button, HelperText, Text, TextInput, Portal, Modal, useTheme } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker"; 
 import * as React from 'react'
+import { useFonts } from 'expo-font';
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 
 import { LocationContext } from "../components/LocationProvider";
 
-import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
-const ListingCreation = ({ navigation, route }) => {
+const ListingCreation = ({ navigation, ...props }) => {
     // Modal related variables
     const theme = useTheme();
+    const [fontsLoaded] = useFonts({
+        "Poppins-Medium" : require('../assets/fonts/Poppins-Medium.ttf'),
+        "Poppins-Light" : require('../assets/fonts/Poppins-Light.ttf'),
+    })
+
     const { location, errorMsg } = React.useContext(LocationContext);
     const today = new Date();
 
@@ -97,9 +102,24 @@ const ListingCreation = ({ navigation, route }) => {
 
     const styles = StyleSheet.create({
         container: {
-            flex: 1,
+            flexDirection: 'column',
+            // flex: 1,
             marginTop: 0,
             //justifyContent: 'center'
+        },
+        jumbotron: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            // flex: 5,
+            backgroundColor: theme.colors.primary,
+        },
+        inputSection: {
+            justifyContent: 'space-between',
+            padding: 20,
+            paddingHorizontal: 30,
+            flexDirection: 'column',
+            height: '50%'
+            // flex: 5
         },
         addListingButton: {
             position: '',
@@ -107,25 +127,19 @@ const ListingCreation = ({ navigation, route }) => {
             alignItems: 'center',
             alignSelf: 'center',
             backgroundColor: theme.colors.primary,
-            borderRadius:40,
-            padding: 13,
+            borderRadius: 10,
             marginBottom: 30
         },
         buttonText: {
             color: 'white',
-            fontFamily: 'Poppins',
-            fontSize: 20
-        },
-        inputTextBox: {
-            //justifyContent: 'center',
-            padding: 20,
-            paddingHorizontal: 30,
+            fontFamily: 'Poppins-Medium',
+            // fontSize: 20
         }
     })
 
     return(
         <View style={styles.container}>
-            <View style={{flex: 1, backgroundColor: '#2DCC70', alignItems: 'center', justifyContent: 'center', padding: 10}}>
+            <View style={styles.jumbotron}>
                 <Text style={{fontFamily: "Poppins", fontSize: 35, color: 'black', padding: 27}}>Don't waste, share the plate!</Text>
             </View>
             <ScrollView>
@@ -204,7 +218,7 @@ const ListingCreation = ({ navigation, route }) => {
             </ScrollView>
 
             <Button mode='contained' style={styles.addListingButton} onPress={handleAddListing}>
-                <Text style={styles.buttonText}>Share food, fight waste</Text>
+                <Text variant="titleLarge" style={styles.buttonText}>Share Food</Text>
             </Button>
 
             

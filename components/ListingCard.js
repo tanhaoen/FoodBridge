@@ -2,14 +2,23 @@ import * as React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Avatar, Badge, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
+import { useFonts } from 'expo-font';
+
 const ListingCard = ({navigation, ...props}) => {
     const theme = useTheme();
+    const [fontsLoaded] = useFonts({
+      "Poppins-Medium" : require('../assets/fonts/Poppins-Medium.ttf'),
+      "Poppins-Light" : require('../assets/fonts/Poppins-Light.ttf'),
+      "Poppins-Regular" : require('../assets/fonts/Poppins-Regular.ttf'),
+    })
     const {
       key,
       _id,
       title,
       description,
+      sellerId,
       sellerName,
+      buyerId,
       price,
       quantity,
       expiryTime,
@@ -30,20 +39,20 @@ const ListingCard = ({navigation, ...props}) => {
             </View>
 
             {/* Second Section */}
-            <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10 }]}>
-              <Text variant='titleMedium' style={[styles.text, {fontFamily: "Poppins-Bold"}]}>{title}</Text>
+            <View style={[styles.section, { flex: 5, backgroundColor: theme.colors.background, paddingLeft: 10, paddingRight: 10 }]}>
+              <Text variant='titleSmall' style={[styles.text, {fontFamily: "Poppins-Bold"}]}>{title}</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text variant='titleSmall' style={[styles.text]}>{sellerName}</Text>
+                <Text variant='labelMedium' style={[styles.text, {fontFamily: "Poppins-Medium"}]}>{sellerName}</Text>
                 {verified && (<Icon source='check-decagram' color='blue' />)}
               </View>
               {price <= 0 && (
-                <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>FREE</Text>  
+                <Text variant='Medium' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>FREE</Text>  
               )}
               {price > 0 && (
-                <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price.toFixed(2)}</Text>
+                <Text variant='titleMedium' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price.toFixed(2)}</Text>
               )}
 
-              <Text variant='titleSmall' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+              <Text variant='labelMedium' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
               <Text variant='labelSmall' style={[styles.text]}>{distance}m away</Text>
             </View>
     
@@ -61,11 +70,10 @@ const ListingCard = ({navigation, ...props}) => {
 
 const styles = StyleSheet.create({
   card: {
-    // marginHorizontal: 16,
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 8,
     elevation: 4, // for shadow on Android
-    height: 150,
+    height: 130, 
   },
   horizontalContainer: {
     flexDirection: 'row',
@@ -78,7 +86,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
-    fontFamily: 'Poppins-Bold',
     color: '#333', // Default text color
   },
   title: {

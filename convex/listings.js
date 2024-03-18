@@ -5,21 +5,25 @@ import { mutation, query } from "./_generated/server";
 
 export const queryListings = query({
   args: {
-    user_id: v.id("users")
+    user_id: v.id("users"),
+    search_query: v.optional(v.string())
   },
   handler: async (ctx, args) => {
-    // return listing with input column and value
-    const listings = await ctx.db
-      .query("listings")
-      .filter((q) => q.neq(q.field("seller_id"), args.user_id))
-      .collect();
 
-    //console.log(listings);
+    let queryBuilder = ctx.db.query("listings").filter((q) => q.neq(q.field("seller_id"), args.user_id));
+
+    if (args.search_query !== undefined && args.search_query !== null && args.search_query !== "") {
+      queryBuilder = queryBuilder.withSearchIndex("by_title", (q) => q.search("title", args.search_query));
+    }
+
+    const listings = await queryBuilder.collect();
+
+    console.log(listings);
 
     const results = await Promise.all(listings.map(async (listing) => {
       const user = await ctx.db.get(listing.seller_id);
 
-      //console.log(user);
+      // console.log(user);
 
       if (user !== null && user !== undefined) {
           return {

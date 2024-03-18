@@ -17,6 +17,8 @@ export default defineSchema({
             latitude: v.number(),
             longitude: v.number()
         }))
+    }).searchIndex("by_title", {
+        searchField: "title",
     }),
     order_number: defineTable({
         order_number: v.number()
@@ -26,7 +28,7 @@ export default defineSchema({
         seller_id : v.id("users"),
         buyer_id: v.id("users"),
         quantity : v.number(),
-        order_status : v.string()
+        order_number : v.number()
     }),
     users: defineTable({
         username: v.string(),

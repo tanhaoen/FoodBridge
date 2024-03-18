@@ -1,21 +1,30 @@
-import { Text, TouchableOpacity, View, StyleSheet, Image, Animated, Touchable } from 'react-native'
+import { TouchableOpacity, View, StyleSheet, Image, Animated, Touchable } from 'react-native'
 import * as React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { ActivityIndicator, Button, useTheme } from 'react-native-paper';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { ActivityIndicator, Button, Divider, Text, useTheme } from 'react-native-paper';
+
+import { useFonts } from 'expo-font';
 
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 
 const OrderConfirm = ({ navigation, route }) => {
     const theme = useTheme();
+    const [fontsLoaded] = useFonts({
+        "Poppins-Medium" : require('../assets/fonts/Poppins-Medium.ttf'),
+        "Poppins-Light" : require('../assets/fonts/Poppins-Light.ttf'),
+        "Poppins-Regular" : require('../assets/fonts/Poppins-Regular.ttf'),
+        "Poppins-Bold" : require('../assets/fonts/Poppins-Bold.ttf'),
+      })
     const [isBuffering, setBuffering] = React.useState(false)
     const [orderQuantity, setOrderQuantity] = React.useState(1)
     const {
         _id,
         title,
         description,
+        sellerId,
         sellerName,
+        buyerId,
         price,
         quantity,
         expiryTime,
@@ -37,13 +46,14 @@ const OrderConfirm = ({ navigation, route }) => {
     }
     const curOrderNum = useQuery(api.order_number.getOrderNumber)
     const incrementOrderNumber = useMutation(api.order_number.incrementOrderNumber);
+    const addOrder = useMutation(api.orders.addOrders);
     const updateListings = useMutation(api.listings.updateListings);
     const [timeoutId, setTimeoutId] = React.useState(null);
 
     const handleConfirmOrder = () => {
         setBuffering(true);
         const id = setTimeout(() => {
-            incrementOrderNumber({ id: "js76304gpwct76fa0mwqavtsys6ner5d", num: curOrderNum });
+            incrementOrderNumber({ id: curOrderNum._id, num: curOrderNum.order_number });
             updateListings({
                 id: _id,
                 column: "quantity",
@@ -52,6 +62,14 @@ const OrderConfirm = ({ navigation, route }) => {
             if (quantity - orderQuantity <= 0) {
                 deleteListing({ id: key });
             }
+            addOrder({
+                buyer_id: buyerId,
+                listings_id: _id,
+                quantity: orderQuantity,
+                seller_id: sellerId,
+                order_number: curOrderNum.order_number,
+            });
+            route.params["orderQuantity"] = orderQuantity;
             navigation.navigate("PickUpConfirmation", route.params);
         }, 5000);
         setTimeoutId(id);
@@ -163,7 +181,12 @@ const OrderConfirm = ({ navigation, route }) => {
         availableTime: {
             fontSize: 17,
             color: 'black',
-            fontFamily: 'Poppins-SemiBold',
+            fontFamily: 'Poppins-Regular',
+        },
+        distance: {
+            fontSize: 17,
+            color: 'black',
+            fontFamily: 'Poppins-Regular',
         },
         price: {
             fontSize: 17,
@@ -218,10 +241,11 @@ const OrderConfirm = ({ navigation, route }) => {
             {/* The bottom white part */}
             <View style={styles.bottomSection}>
                 <View style={styles.bottomFirstSection}>
-                    <Text style={styles.foodTitle}>{title}</Text>
-                    <Text style={styles.availableTime}>Available Until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-                    <Text style={styles.availableTime}>{distance}m away</Text>
-                    <Text style={styles.foodDescription}>{description}</Text>
+                    <Text variant='headlineSmall' style={{fontFamily:'Poppins-Bold'}}>{title}</Text>
+                    <Text variant='titleMedium' style={{fontFamily: 'Poppins-Medium'}}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+                    <Text variant='titleMedium' style={{fontFamily: 'Poppins-Medium'}}>{distance}m away</Text>
+                    <Divider />
+                    <Text variant='bodyMedium' style={{fontFamily: 'Poppins-Light'}}>{description}</Text>
                     <View style={styles.foodQuantity}>
                         {/* <Text style={{fontSize: 25, marginTop: 15, fontFamily: 'Poppins-SemiBold'}}> x {orderQuantity}</Text> */}
                     </View>
@@ -235,9 +259,7 @@ const OrderConfirm = ({ navigation, route }) => {
                         </TouchableOpacity>
 
                         {/* Middle part where it displays the quantity */}
-                        <Text style={{fontSize: 20, fontFamily: 'Poppins-Bold', opacity: 1}}>{orderQuantity}</Text>
-                
-
+                        <Text variant='headlineSmall' style={{ fontFamily: 'Poppins-Bold' }}>{orderQuantity}</Text>
 
                         {/* The add button */}
                         <TouchableOpacity style={{backgroundColor: theme.colors.primary}} onPress={handleAddOrder}>
@@ -248,7 +270,7 @@ const OrderConfirm = ({ navigation, route }) => {
                         {/* <Text style={{marginLeft: 10, marginTop: 10, fontSize: 15, fontFamily: 'Poppins-Bold'}}>max: {quantity}</Text> */}
                     </View>
                     <View style={{alignItems: 'center', marginTop: 20}}>
-                        <Text style={styles.price}>${price.toFixed(2)} per serving</Text>
+                        <Text variant='titleMedium' style={{fontFamily: 'Poppins-Medium'}}>${price.toFixed(2)} per serving</Text>
                     </View>
                     <View style={styles.foodTotalPrice}>
                         <Text style={{fontFamily: 'Poppins-SemiBold', fontSize: 18, marginTop: 32, marginRight: 10}}>Total:</Text>
@@ -256,7 +278,7 @@ const OrderConfirm = ({ navigation, route }) => {
                     </View>
                     <View style={{alignItems:'center', fontFamily: 'Poppins-Bold', fontSize: '10'}}>
                         {orderQuantity === quantity && (
-                            <Text style={{color: 'red', fontFamily: "Poppins"}}>Maximum quantity reached</Text>
+                            <Text style={{color: 'red', fontFamily: "Poppins-Medium"}}>Maximum quantity reached</Text>
                         )}
                     </View>
                 </View>
