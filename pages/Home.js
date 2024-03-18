@@ -38,13 +38,9 @@ const Home = ({ navigation }) => {
   const [selectedDistance, setSelectedDistance] = React.useState(1000);
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
-  // const { isSignedIn, user } = useUser();
-  // if (isSignedIn) {
-  //     console.log(user.firstName)
-  //     console.log(user.lastName)
-  //     console.log(user.email)
-  // }
-  const USERID = "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7";
+  const { isSignedIn, user } = useUser();
+
+  const USERID = useQuery(api.users.getUserID, { first_name: user.firstName });
 
   const listingData = useQuery(api.listings.queryListings, { user_id: USERID, search_query: searchQuery });
 

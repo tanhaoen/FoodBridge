@@ -53,7 +53,7 @@ const OrderConfirm = ({ navigation, route }) => {
     const handleConfirmOrder = () => {
         setBuffering(true);
         const id = setTimeout(() => {
-            incrementOrderNumber({ id: "js76304gpwct76fa0mwqavtsys6ner5d", num: curOrderNum });
+            incrementOrderNumber({ id: curOrderNum._id, num: curOrderNum.order_number });
             updateListings({
                 id: _id,
                 column: "quantity",
@@ -67,8 +67,9 @@ const OrderConfirm = ({ navigation, route }) => {
                 listings_id: _id,
                 quantity: orderQuantity,
                 seller_id: sellerId,
-                order_number: curOrderNum,
+                order_number: curOrderNum.order_number,
             });
+            route.params["orderQuantity"] = orderQuantity;
             navigation.navigate("PickUpConfirmation", route.params);
         }, 5000);
         setTimeoutId(id);

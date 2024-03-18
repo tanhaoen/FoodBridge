@@ -50,7 +50,7 @@ const ListingCreation = ({ navigation, route }) => {
         await addListing({
             title: foodTitle,
             description: foodDesc,
-            seller_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7",
+            seller_id: route.params.seller_id,
             price: price,
             quantity: quantity,
             expiry_time: Math.floor(expiryDateTime.getTime()),

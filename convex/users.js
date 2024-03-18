@@ -24,6 +24,20 @@ export const queryUsers = query({
     }
 });
 
+export const getUserID = query({
+    args: {
+      first_name: v.optional(v.string())
+    },
+    handler: async (ctx, args) => {
+      
+        const user = await ctx.db
+          .query("users")
+          .filter((q) => q.eq(q.field("first_name"), args.first_name))
+          .first();
+        return user._id;
+    }
+});
+
 export const checkValidUsername = query({
     args: {
       username: v.optional(v.string())

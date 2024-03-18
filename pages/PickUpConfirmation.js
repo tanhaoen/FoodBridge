@@ -18,6 +18,7 @@ const PickUpConfirmation = ({ navigation, route }) => {
         sellerName,
         price,
         quantity,
+        orderQuantity,
         expiryTime,
         distance,
         location,
@@ -33,7 +34,7 @@ const PickUpConfirmation = ({ navigation, route }) => {
         "Poppins-SemiBold" : require('../assets/fonts/Poppins-SemiBold.ttf'),
         "Poppins-Bold" : require('../assets/fonts/Poppins-Bold.ttf'),
         });
-    const order_number = useQuery(api.order_number.getOrderNumber)
+    const orderNumber = useQuery(api.order_number.getOrderNumber)
     const address = "1 Woodlands Square, #01 - 35 Causeway Point, Singapore 738099"
     const [isPaymentSucessful, setPaymentSuccessful] = React.useState(false)
     const handleBackToHome = async () => {
@@ -87,8 +88,8 @@ const PickUpConfirmation = ({ navigation, route }) => {
                 <View style={{alignItems: 'center', justifyContent: 'center'}}>
                     <Text variant='headlineSmall' style={{fontFamily: 'Poppins-SemiBold'}}>Your order is ready!</Text>
                     <Text style={{fontFamily: 'Poppins-Regular', fontSize: 20, padding: 10}}>Pick up number is</Text>
-                    <Text variant='displayMedium' style={{fontFamily: 'Poppins-Bold', fontSize: 40, color: '#00692C', padding: 15}}>{order_number}</Text>
-                    <Text variant='titleLarge' style={{fontFamily: 'Poppins-Regular'}}>Pay ${(price * quantity).toFixed(2)} in cash</Text>
+                    <Text variant='displayMedium' style={{fontFamily: 'Poppins-Bold', fontSize: 40, color: '#00692C', padding: 15}}>{orderNumber.order_number}</Text>
+                    <Text variant='titleLarge' style={{fontFamily: 'Poppins-Regular'}}>Pay ${(price * orderQuantity).toFixed(2)} in cash</Text>
                     <Text variant='headlineSmall' style={{fontFamily: 'Poppins-SemiBold'}}>Collect by {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 </View>
             </View>
