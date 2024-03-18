@@ -68,7 +68,7 @@ const PickUpConfirmation = ({ navigation, route }) => {
     
     const styles = StyleSheet.create({
         container: {
-            flex: 0.5,
+            flex: 0.55,
             marginTop: 80,
             alignItems: 'center'
         },
@@ -88,6 +88,7 @@ const PickUpConfirmation = ({ navigation, route }) => {
                     <Text variant='headlineSmall' style={{fontFamily: 'Poppins-SemiBold'}}>Your order is ready!</Text>
                     <Text style={{fontFamily: 'Poppins-Regular', fontSize: 20, padding: 10}}>Pick up number is</Text>
                     <Text variant='displayMedium' style={{fontFamily: 'Poppins-Bold', fontSize: 40, color: '#00692C', padding: 15}}>{order_number}</Text>
+                    <Text variant='titleLarge' style={{fontFamily: 'Poppins-Regular'}}>Pay ${(price * quantity).toFixed(2)} in cash</Text>
                     <Text variant='headlineSmall' style={{fontFamily: 'Poppins-SemiBold'}}>Collect by {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 </View>
             </View>
