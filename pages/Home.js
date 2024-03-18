@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { ScrollView, StyleSheet, View, Image } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { ActivityIndicator, Chip, Divider, Icon, IconButton, Searchbar, Text, useTheme } from "react-native-paper";
+import { useFonts } from 'expo-font';
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-//import { calculateDistance} from "../utils";
+import { calculateDistance} from "../utils";
 
 import Slider from '@react-native-community/slider';
 
@@ -15,6 +16,12 @@ import { LocationContext } from "../components/LocationProvider";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Home = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Medium" : require('../assets/fonts/Poppins-Medium.ttf'),
+    "Poppins-Light" : require('../assets/fonts/Poppins-Light.ttf'),
+    "Poppins-Regular" : require('../assets/fonts/Poppins-Regular.ttf'),
+  })
+
   const theme = useTheme();
   const { location, errorMsg } = React.useContext(LocationContext);
 
@@ -37,8 +44,7 @@ const Home = ({ navigation }) => {
 
       if (location !== undefined && location !== null) {
         temp = temp.map((item) => {
-          item.distance = 5;
-          //item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;
         });
       }
@@ -96,7 +102,8 @@ const Home = ({ navigation }) => {
     filter: {
       marginBottom: 25,
       flexDirection: 'row',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      flexGrow: 0,
     },
     row : {
       flexDirection: 'row',
@@ -141,7 +148,7 @@ const Home = ({ navigation }) => {
         }}
       />
 
-      <View style={styles.filter}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filter}>
         <Chip
           icon="sort"
           style={[styles.chip, styles.chip_unselected]}
@@ -171,7 +178,7 @@ const Home = ({ navigation }) => {
         >
           Verified
         </Chip>
-      </View>
+      </ScrollView>
 
       <View>
         {currentOption === 'distance' && (
@@ -221,7 +228,7 @@ const Home = ({ navigation }) => {
 
       {listingData !== undefined ? (
       <View style={{flex: 1}}>
-        <ScrollView vertical>
+        <ScrollView vertical showsVerticalScrollIndicator={false}>
           {listingData !== undefined && listingData !== null && listingData.length > 0 ? (
             results.map((item, index) => (
               <ListingCard
