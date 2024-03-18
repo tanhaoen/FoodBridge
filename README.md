@@ -16,6 +16,6 @@ npm start
 ```
 
 ## Contributors
-Nathaniel Tan Hao En
-Laiu Yan Kang, Asher
-Hon Hao Yuan
+- Nathaniel Tan Hao En
+- Laiu Yan Kang, Asher
+- Hon Hao Yuan
