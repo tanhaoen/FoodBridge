@@ -147,7 +147,7 @@ export default function Account() {
 				</View>
 			</View>
 			<View style={styles.settings}>
-				<List.AccordionGroup>
+				{/* <List.AccordionGroup>
 					<List.Accordion title="Edit Profile" id="edit" style={styles.accordion}>
 						<View style={styles.edit_profile_group}>
 							<TextInput
@@ -216,9 +216,14 @@ export default function Account() {
 							<List.Item title="FAQ" />
 							<List.Item title="Contact Us" />
 					</List.Accordion>
-				</List.AccordionGroup>
+				</List.AccordionGroup> */}
 
-				<Button onPress={() => SignOut()} mode='contained' buttonColor={theme.colors.error} >
+				<Button
+					onPress={() => SignOut()}
+					mode='contained'
+					buttonColor={theme.colors.error}
+					style={{marginTop: 50}}
+				>
 					Logout
 				</Button>
 			</View>
