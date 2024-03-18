@@ -4,7 +4,22 @@ import * as React from "react";
 import { Image, TouchableOpacity, StyleSheet, View } from "react-native";
 import { Avatar, Banner, Button, Icon, List, RadioButton, Text, TextInput, useTheme } from "react-native-paper";
 
+//auth
+import { ClerkProvider, SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
+import SignInScreen from "./auth/SignInScreen";
+
 export default function Account() {
+	//auth
+	const { isLoaded, signOut} = useAuth();
+	const SignOut = () => {
+
+		if (!isLoaded) {
+		  return null;
+		}
+		signOut();
+		console.log("Signed Out");
+	}
+
 	
 	const theme = useTheme();
 
@@ -132,7 +147,7 @@ export default function Account() {
 				</View>
 			</View>
 			<View style={styles.settings}>
-				<List.AccordionGroup>
+				{/* <List.AccordionGroup>
 					<List.Accordion title="Edit Profile" id="edit" style={styles.accordion}>
 						<View style={styles.edit_profile_group}>
 							<TextInput
@@ -201,9 +216,16 @@ export default function Account() {
 							<List.Item title="FAQ" />
 							<List.Item title="Contact Us" />
 					</List.Accordion>
-				</List.AccordionGroup>
+				</List.AccordionGroup> */}
 
-				<Button mode='contained' buttonColor={theme.colors.error}>Logout</Button>
+				<Button
+					onPress={() => SignOut()}
+					mode='contained'
+					buttonColor={theme.colors.error}
+					style={{marginTop: 50}}
+				>
+					Logout
+				</Button>
 			</View>
 			</>
 			) : null}

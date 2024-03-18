@@ -6,12 +6,15 @@ const ListingCard = ({navigation, ...props}) => {
     const theme = useTheme();
     const {
       key,
+      _id,
       title,
+      description,
       sellerName,
       price,
       quantity,
       expiryTime,
       distance,
+      location,
       thumbnailUrl,
       verified } = props;
 
@@ -37,7 +40,7 @@ const ListingCard = ({navigation, ...props}) => {
                 <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>FREE</Text>  
               )}
               {price > 0 && (
-                <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price}</Text>
+                <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price.toFixed(2)}</Text>
               )}
 
               <Text variant='titleSmall' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>

@@ -13,10 +13,10 @@ export default defineSchema({
         expiry_time: v.number(),
         categories: v.array(v.string()),
         thumbnail_url: v.string(), 
-        location: v.object({
+        location: v.optional(v.object({
             latitude: v.number(),
             longitude: v.number()
-        })
+        }))
     }),
     order_number: defineTable({
         order_number: v.number()
@@ -37,7 +37,7 @@ export default defineSchema({
         phone: v.string(),
         verified: v.boolean(),
         level: v.number(),
-        location: v.object({latitude: v.number(), longitude: v.number()})
+        location: v.optional(v.object({latitude: v.number(), longitude: v.number()}))
     })
     .index("by_username", ["username"])
   });

@@ -17,12 +17,17 @@ const styles = StyleSheet.create({
 		borderColor: '#2DCC70',
 		borderRadius: 4,
 		padding: 10,
-		backgroundColor: '#fff'
+		backgroundColor: '#fff',
+    fontFamily: 'Poppins-Regular',
+    color: 'rgba(0, 0, 0, 0.5)'
+
 	},
 	button: {
-		margin: 8,
-		alignItems: 'center'
-	}
+		// margin: 8,
+		alignItems: 'center',
+    paddingHorizontal: 50,
+    paddingVertical:10
+	},
 });
  
 export default function SignUpScreen() {
@@ -102,7 +107,7 @@ export default function SignUpScreen() {
             <TextInput
               autoCapitalize="none"
               value={emailAddress}
-              placeholder="Email..."
+              placeholder="Email"
               onChangeText={(email) => setEmailAddress(email)}
               style={styles.inputField}
             />
@@ -111,8 +116,7 @@ export default function SignUpScreen() {
           <View>
             <TextInput
               value={password}
-              placeholder="Password..."
-              placeholderTextColor="#000"
+              placeholder="Password"
               secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
               style={styles.inputField}
@@ -120,7 +124,10 @@ export default function SignUpScreen() {
           </View>
  
           <View style={{alignItems: 'center'}}>  
-            <TouchableOpacity onPress={onSignUpPress} style={{backgroundColor: '#2DCC70', borderRadius: 30, alignItems: 'center', padding: 0}}>
+            <TouchableOpacity onPress={onSignUpPress} style=
+          {{backgroundColor: '#2DCC70', borderRadius: 30, 
+          alignItems: 'center',justifyContent:'center', marginTop: 10,
+          paddingHorizontal:5, paddingVertical:5}}>
               <Text style={{color: 'white', fontFamily: 'Poppins-Regular', fontSize: 20, paddingHorizontal: 50, padding: 10}}>SIGN UP</Text>
             </TouchableOpacity>
           </View> 
@@ -131,7 +138,7 @@ export default function SignUpScreen() {
           <View>
             <TextInput
               value={code}
-              placeholder="Code..."
+              placeholder="Code"
               onChangeText={(code) => setCode(code)}
               style={styles.inputField}
             />
@@ -139,11 +146,16 @@ export default function SignUpScreen() {
           {/* <TouchableOpacity onPress={onPressVerify}>
             <Text>Verify Email</Text>
           </TouchableOpacity> */}
-          <Button
-            title="Verify Email"
+          <TouchableOpacity
             onPress={onPressVerify}
-            color={'#6c47ff'}
-            style={styles.button}></Button>
+            color={'#2DCC70'}
+            style={{backgroundColor: '#2DCC70', borderRadius: 30, 
+            alignItems: 'center',justifyContent:'center', marginTop: 10,
+            paddingHorizontal:5, paddingVertical:5}}>
+              <Text style=
+            {{color: 'white', fontFamily: 'Poppins-Regular', 
+            fontSize: 20, paddingHorizontal: 50, padding: 10}}>Verify Code</Text>
+              </TouchableOpacity>
         </View>
       )}
     </View>

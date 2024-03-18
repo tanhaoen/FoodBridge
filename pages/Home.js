@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet, View, Image } from 'react-native';
-import { ActivityIndicator, Chip, Divider, Searchbar, Text, useTheme } from "react-native-paper";
+import { ActivityIndicator, Chip, Divider, Icon, IconButton, Searchbar, Text, useTheme } from "react-native-paper";
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-import { calculateDistance} from "../utils";
+//import { calculateDistance} from "../utils";
 
 import Slider from '@react-native-community/slider';
 
@@ -37,7 +37,8 @@ const Home = ({ navigation }) => {
 
       if (location !== undefined && location !== null) {
         temp = temp.map((item) => {
-          item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
+          item.distance = 5;
+          //item.distance = calculateDistance(location.coords.latitude, location.coords.longitude, item.location.latitude, item.location.longitude);
           return item;
         });
       }
@@ -120,6 +121,10 @@ const Home = ({ navigation }) => {
   // const handleCuisineChange = (values) => {
   //   setSelectedCuisines(values);
   // }
+
+  const AssetIcon = () => {
+    return <Icon icon={() => <Image source={require('../assets/add_listing_button.png')}/>}/> 
+  }
 
   const handleAddListing = () => {
     navigation.navigate("Create Listing")
@@ -222,12 +227,15 @@ const Home = ({ navigation }) => {
               <ListingCard
                 navigation={navigation}
                 key={item._id}
+                _id={item._id}
                 title={item.title}
+                description={item.description}
                 sellerName={item.seller_name}
                 price={item.price}
                 quantity={item.quantity}
                 expiryTime={item.expiry_time}
                 distance={item.distance}
+                location={item.location}
                 thumbnailUrl={item.thumbnail_url}
                 verified={item.verified}
               />
@@ -236,8 +244,8 @@ const Home = ({ navigation }) => {
             <Text>No listings found</Text>
           )}
         </ScrollView>
-        <TouchableOpacity onPress={handleAddListing} style={{position:'absolute', right: 10, bottom: 20, justifyContent: 'center', alignItems: 'center'}}>
-          <Image style={{width: 85, height: 85}} source={require('../assets/add_listing_button.png')}/>
+        <TouchableOpacity onPress={handleAddListing} style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Image style={{width: 85, height: 85}} source={require('../assets/add_listing_button.png')} />
         </TouchableOpacity>
       </View>
       ) : (

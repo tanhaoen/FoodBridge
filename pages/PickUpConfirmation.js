@@ -1,6 +1,6 @@
 import { View, StyleSheet, TouchableOpacity, Text, Linking } from "react-native";
 import * as React from 'react'
-import { ActivityIndicator, Card } from "react-native-paper";
+import { ActivityIndicator, Button, Card } from "react-native-paper";
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import { useQuery } from "convex/react";
@@ -37,9 +37,9 @@ const PickUpConfirmation = ({ navigation, route }) => {
     const OrderCollectedButton = () => {
         return (
             <View style={{justifyContent: 'flex-end', padding: 30, flex: 1, alignItems: 'center'}}>
-                <TouchableOpacity onPress={handleBackToHome} style={styles.OrderCollectedButton}>
-                    <Text style={{color: 'white', fontSize: 25, fontFamily: 'Poppins'}}>Order Collected</Text>
-                </TouchableOpacity>
+                <Button mode='contained' style={styles.OrderCollectedButton} onPress={handleBackToHome}>
+                    <Text style={{color: 'white', fontFamily: 'Poppins'}}>Order Collected</Text>
+                </Button>
             </View>
         )
     }

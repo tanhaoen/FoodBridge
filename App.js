@@ -3,7 +3,7 @@ import { MD3LightTheme as DefaultTheme, PaperProvider, Text } from 'react-native
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { LogBox } from 'react-native';
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { CONVEX_URL } from "@env";
 
@@ -19,7 +19,7 @@ import OrderConfirm from "./pages/OrderConfirm";
 import PickUpConfirmation from "./pages/PickUpConfirmation";
 import ListingCreation from "./pages/ListingCreation";
 
-//auth//auth 
+//auth
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { Authenticated, Unauthenticated} from "convex/react";
@@ -33,6 +33,8 @@ const convex = new ConvexReactClient(CONVEX_URL.toString(), {
 
 const Stack = createStackNavigator();
 
+//stop showing logs in app
+LogBox.ignoreAllLogs();
 export default function App() {
 
   let [fontsLoaded] = useFonts({
@@ -57,18 +59,19 @@ export default function App() {
               <Unauthenticated>
                 <Stack.Navigator>
                   <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
-                  <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+                  <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{headerShown: false}} />
                 </Stack.Navigator>
               </Unauthenticated>
 
               <Authenticated>
                 <Stack.Navigator> 
                   <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false, title: "Home"}}/>
-                  <Stack.Screen name="Create Listing" component={ListingCreation} options={{title: "Back to Home"}}/>
+                  <Stack.Screen name="Create Listing" component={ListingCreation} options={{title: "Create Listing"}}/>
                   <Stack.Screen name="OrderConfirm" component={OrderConfirm} options={{title: 'Place Order'}}/>
                   <Stack.Screen name="PickUpConfirmation" component={PickUpConfirmation} options={{headerShown: false}}/>
                 </Stack.Navigator>
               </Authenticated>
+              
               </LocationProvider>
             </NavigationContainer>
           </SafeAreaProvider>
