@@ -56,7 +56,7 @@ const ListingCreation = ({ navigation, ...props }) => {
             quantity: quantity,
             expiry_time: Math.floor(expiryDateTime.getTime()),
             categories: [],
-            thumbnail_url: foodPhoto,
+            thumbnail_url: file,
             location: {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude
@@ -96,7 +96,7 @@ const ListingCreation = ({ navigation, ...props }) => {
   
                 // Clear any previous errors 
                 setError(null); 
-            } 
+            }
         } 
     }; 
 
