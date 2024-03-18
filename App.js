@@ -3,7 +3,7 @@ import { MD3LightTheme as DefaultTheme, PaperProvider, Text } from 'react-native
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { LogBox } from 'react-native';
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { CONVEX_URL } from "@env";
 
@@ -33,6 +33,8 @@ const convex = new ConvexReactClient(CONVEX_URL.toString(), {
 
 const Stack = createStackNavigator();
 
+//stop showing logs in app
+LogBox.ignoreAllLogs();
 export default function App() {
 
   let [fontsLoaded] = useFonts({

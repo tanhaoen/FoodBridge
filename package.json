@@ -29,7 +29,7 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-element-dropdown": "^2.10.2",
     "react-native-geolocation-service": "^5.3.1",
-    "react-native-gesture-handler": "^2.15.0",
+    "react-native-gesture-handler": "~2.14.0",
     "react-native-get-random-values": "^1.10.0",
     "react-native-ionicons": "^4.6.5",
     "react-native-maps": "1.10.0",
