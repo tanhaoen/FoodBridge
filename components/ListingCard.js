@@ -33,8 +33,12 @@ const ListingCard = ({navigation, ...props}) => {
                 <Text variant='titleSmall' style={[styles.text]}>{sellerName}</Text>
                 {verified && (<Icon source='check-decagram' color='blue' />)}
               </View>
-              
-              <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price}</Text>
+              {price <= 0 && (
+                <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>FREE</Text>  
+              )}
+              {price > 0 && (
+                <Text variant='titleLarge' style={[styles.text, {color: theme.colors.secondary, fontFamily: "Poppins-Bold"}]}>${price}</Text>
+              )}
 
               <Text variant='titleSmall' style={[styles.text]}>Available until {new Date(expiryTime * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
               <Text variant='labelSmall' style={[styles.text]}>{distance}m away</Text>
