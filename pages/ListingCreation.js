@@ -9,7 +9,6 @@ import { api } from "../convex/_generated/api";
 
 import { LocationContext } from "../components/LocationProvider";
 
-import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const ListingCreation = ({ navigation, route }) => {
