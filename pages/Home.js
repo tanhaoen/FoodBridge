@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { FlatList, ScrollView, StyleSheet, View, Image } from 'react-native';
 import { ActivityIndicator, Chip, Divider, Icon, IconButton, Searchbar, Text, useTheme } from "react-native-paper";
+
 import { useFonts } from 'expo-font';
+import { ClerkProvider, SignedIn, SignedOut, useAuth, useUser } from "@clerk/clerk-expo";
 
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
@@ -35,6 +37,13 @@ const Home = ({ navigation }) => {
   const [displayDistance, setDisplayDistance] = React.useState(1000);
   const [selectedDistance, setSelectedDistance] = React.useState(1000);
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
+
+  // const { isSignedIn, user } = useUser();
+  // if (isSignedIn) {
+  //     console.log(user.firstName)
+  //     console.log(user.lastName)
+  //     console.log(user.email)
+  // }
 
   const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7", search_query: searchQuery });
 

@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 8,
     elevation: 4, // for shadow on Android
-    height: 150, 
+    height: 130, 
   },
   horizontalContainer: {
     flexDirection: 'row',
