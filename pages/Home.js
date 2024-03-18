@@ -227,13 +227,15 @@ const Home = ({ navigation }) => {
               <ListingCard
                 navigation={navigation}
                 key={item._id}
-                id={item._id}
+                _id={item._id}
                 title={item.title}
+                description={item.description}
                 sellerName={item.seller_name}
                 price={item.price}
                 quantity={item.quantity}
                 expiryTime={item.expiry_time}
                 distance={item.distance}
+                location={item.location}
                 thumbnailUrl={item.thumbnail_url}
                 verified={item.verified}
               />

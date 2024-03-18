@@ -6,12 +6,15 @@ const ListingCard = ({navigation, ...props}) => {
     const theme = useTheme();
     const {
       key,
+      _id,
       title,
+      description,
       sellerName,
       price,
       quantity,
       expiryTime,
       distance,
+      location,
       thumbnailUrl,
       verified } = props;
 

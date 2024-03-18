@@ -73,7 +73,7 @@ export const updateListings = mutation({
   args: { 
     id: v.id("listings"),
     column: v.string(),
-    input : v.any()
+    input : v.number()
     },
 
     //handler for the mutation
