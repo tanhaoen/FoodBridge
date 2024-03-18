@@ -20,7 +20,7 @@ const Home = ({ navigation }) => {
 
   const cuisines = ["Chinese", "Malay", "Indian", "Western", "Korean", "Thai", "Japanese"]
 
-  const [searchQuery, setSearchQuery] = React.useState('')
+  const [searchQuery, setSearchQuery] = React.useState("");
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [currentOption, setCurrentOption] = React.useState('');
   const [selectedSorting, setSelectedSorting] = React.useState({ field: "_creationTime", order: "desc" });
@@ -29,10 +29,10 @@ const Home = ({ navigation }) => {
   const [selectedDistance, setSelectedDistance] = React.useState(1000);
   const [verifiedOnly, setVerifiedOnly] = React.useState(false);
 
-  const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7" });
+  const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7", search_query: searchQuery });
 
   const results = React.useMemo(() => {
-    if (listingData !== undefined) {
+    if (listingData !== undefined && listingData !== null) {
       let temp = listingData;
 
       if (location !== undefined && location !== null) {
@@ -222,7 +222,7 @@ const Home = ({ navigation }) => {
       {listingData !== undefined ? (
       <View style={{flex: 1}}>
         <ScrollView vertical>
-          {listingData.length > 0 ? (
+          {listingData !== undefined && listingData !== null && listingData.length > 0 ? (
             results.map((item, index) => (
               <ListingCard
                 navigation={navigation}

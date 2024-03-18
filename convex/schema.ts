@@ -17,6 +17,8 @@ export default defineSchema({
             latitude: v.number(),
             longitude: v.number()
         }))
+    }).searchIndex("by_title", {
+        searchField: "title",
     }),
     order_number: defineTable({
         order_number: v.number()

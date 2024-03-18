@@ -61,9 +61,22 @@ const ListingCreation = ({ navigation, route }) => {
 
     const styles = StyleSheet.create({
         container: {
-            flex: 1,
+            flexDirection: 'column',
+            // flex: 1,
             marginTop: 0,
             //justifyContent: 'center'
+        },
+        jumbotron: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            // flex: 5,
+            backgroundColor: theme.colors.primary,
+        },
+        inputSection: {
+            justifyContent: 'space-between',
+            padding: 20,
+            paddingHorizontal: 30,
+            // flex: 5
         },
         addListingButton: {
             position: '',
@@ -79,21 +92,16 @@ const ListingCreation = ({ navigation, route }) => {
             color: 'white',
             fontFamily: 'Poppins',
             fontSize: 20
-        },
-        inputTextBox: {
-            //justifyContent: 'center',
-            padding: 20,
-            paddingHorizontal: 30,
         }
     })
 
     return(
         <View style={styles.container}>
-            <View style={{flex: 1, backgroundColor: '#2DCC70', alignItems: 'center', justifyContent: 'center', padding: 10}}>
+            <View style={styles.jumbotron}>
                 <Text style={{fontFamily: "Poppins", fontSize: 35, color: 'black', padding: 27}}>Don't waste, share the plate!</Text>
             </View>
-            <ScrollView>
-                <View style={styles.inputTextBox}>
+            <View>
+                <View style={styles.inputSection}>
                     <TextInput
                         value={foodTitle}
                         placeholder="The shorter the better!"
@@ -137,7 +145,6 @@ const ListingCreation = ({ navigation, route }) => {
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View>
                             <Text variant="titleMedium">Available until</Text>
-                            <Text>Maximum 2 hours later</Text>
                         </View>
                         <RNDateTimePicker
                             mode="datetime"
@@ -157,7 +164,7 @@ const ListingCreation = ({ navigation, route }) => {
                         onChangeText={(FoodPhoto) => setFoodPhoto(FoodPhoto)}
                     /> */}
                 </View>
-            </ScrollView>
+            </View>
 
             <Button mode='contained' style={styles.addListingButton} onPress={handleAddListing}>
                 <Text style={styles.buttonText}>Share food, fight waste</Text>
