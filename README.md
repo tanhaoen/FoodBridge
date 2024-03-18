@@ -5,7 +5,7 @@ FoodBridge connects individuals and businesses with excess food to those who nee
 
 
 ## Installation
-Download your iOS emulator of choice. App is optimised for iPhone 15 and iOS 17
+Download your iOS emulator of choice. FoodBridge is optimised for iPhone 15 and iOS 17
 
 ### Startup
 ```bash
