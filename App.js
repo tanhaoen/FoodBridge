@@ -55,15 +55,12 @@ export default function App() {
               <LocationProvider>
 
               <Unauthenticated>
-              <Unauthenticated>
                 <Stack.Navigator>
                   <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
                   <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{headerShown: false}} />
                 </Stack.Navigator>
               </Unauthenticated>
-              </Unauthenticated>
 
-              <Authenticated>
               <Authenticated>
                 <Stack.Navigator> 
                   <Stack.Screen name="HomePage" component={BottomNavBar} options={{headerShown: false, title: "Home"}}/>

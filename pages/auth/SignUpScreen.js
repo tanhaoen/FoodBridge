@@ -146,11 +146,16 @@ export default function SignUpScreen() {
           {/* <TouchableOpacity onPress={onPressVerify}>
             <Text>Verify Email</Text>
           </TouchableOpacity> */}
-          <Button
-            title="Verify Email"
+          <TouchableOpacity
             onPress={onPressVerify}
             color={'#2DCC70'}
-            style={styles.button}></Button>
+            style={{backgroundColor: '#2DCC70', borderRadius: 30, 
+            alignItems: 'center',justifyContent:'center', marginTop: 10,
+            paddingHorizontal:5, paddingVertical:5}}>
+              <Text style=
+            {{color: 'white', fontFamily: 'Poppins-Regular', 
+            fontSize: 20, paddingHorizontal: 50, padding: 10}}>Verify Code</Text>
+              </TouchableOpacity>
         </View>
       )}
     </View>
