@@ -28,7 +28,7 @@ export default defineSchema({
         seller_id : v.id("users"),
         buyer_id: v.id("users"),
         quantity : v.number(),
-        order_status : v.string()
+        order_number : v.number()
     }),
     users: defineTable({
         username: v.string(),

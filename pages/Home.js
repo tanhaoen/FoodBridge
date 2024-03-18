@@ -44,8 +44,9 @@ const Home = ({ navigation }) => {
   //     console.log(user.lastName)
   //     console.log(user.email)
   // }
+  const USERID = "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7";
 
-  const listingData = useQuery(api.listings.queryListings, { user_id: "jh7dd7a3s178tyv4dzz2m1ebrd6nbsq7", search_query: searchQuery });
+  const listingData = useQuery(api.listings.queryListings, { user_id: USERID, search_query: searchQuery });
 
   const results = React.useMemo(() => {
     if (listingData !== undefined && listingData !== null) {
@@ -246,7 +247,9 @@ const Home = ({ navigation }) => {
                 _id={item._id}
                 title={item.title}
                 description={item.description}
+                sellerId={item.seller_id}
                 sellerName={item.seller_name}
+                buyerId={USERID}
                 price={item.price}
                 quantity={item.quantity}
                 expiryTime={item.expiry_time}

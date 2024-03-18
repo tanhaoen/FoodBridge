@@ -22,7 +22,9 @@ const OrderConfirm = ({ navigation, route }) => {
         _id,
         title,
         description,
+        sellerId,
         sellerName,
+        buyerId,
         price,
         quantity,
         expiryTime,
@@ -44,6 +46,7 @@ const OrderConfirm = ({ navigation, route }) => {
     }
     const curOrderNum = useQuery(api.order_number.getOrderNumber)
     const incrementOrderNumber = useMutation(api.order_number.incrementOrderNumber);
+    const addOrder = useMutation(api.orders.addOrders);
     const updateListings = useMutation(api.listings.updateListings);
     const [timeoutId, setTimeoutId] = React.useState(null);
 
@@ -59,6 +62,13 @@ const OrderConfirm = ({ navigation, route }) => {
             if (quantity - orderQuantity <= 0) {
                 deleteListing({ id: key });
             }
+            addOrder({
+                buyer_id: buyerId,
+                listings_id: _id,
+                quantity: orderQuantity,
+                seller_id: sellerId,
+                order_number: curOrderNum,
+            });
             navigation.navigate("PickUpConfirmation", route.params);
         }, 5000);
         setTimeoutId(id);
