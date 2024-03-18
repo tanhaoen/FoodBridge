@@ -18,4 +18,4 @@ npm start
 ## Contributors
 - Nathaniel Tan Hao En
 - Laiu Yan Kang, Asher
-- Hon Hao Yuan
+- Hon Hao Yuan, Brandon
