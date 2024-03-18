@@ -54,12 +54,12 @@ export default function App() {
             <NavigationContainer>
               <LocationProvider>
 
-              {/* <Unauthenticated>
+              <Unauthenticated>
                 <Stack.Navigator>
                   <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
                   <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
                 </Stack.Navigator>
-              </Unauthenticated> */}
+              </Unauthenticated>
 
               <Authenticated>
                 <Stack.Navigator> 
