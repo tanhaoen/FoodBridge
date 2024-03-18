@@ -1,14 +1,16 @@
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View, StyleSheet, Button, Pressable, Alert, Image } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet, Button, Pressable, Alert, Image, ImageBackground } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { useSignIn, useOAuth } from "@clerk/clerk-expo";
 import SignUpScreen from './SignUpScreen';
 import { useWarmUpBrowser } from "./useWarmUpBrowser";
 
-const googleIcon = require('../../assets/google3.png');
-
 const styles = StyleSheet.create({
-	container: {
+  container1:{
+    flex:1, 
+    justifyContent:'center'
+  },
+	container2: {
 		flex: 1,
 		justifyContent: 'center',
 		padding: 20
@@ -20,17 +22,49 @@ const styles = StyleSheet.create({
 		borderColor: '#2DCC70',
 		borderRadius: 4,
 		padding: 10,
-		backgroundColor: '#fff'
+		backgroundColor: '#fff',
+    fontFamily: 'Poppins-Regular',
+    color: 'rgba(0, 0, 0, 0.5)'
 	},
 	button: {
-		margin: 8,
-		alignItems: 'center'
+		// margin: 8,
+		alignItems: 'center',
+    paddingHorizontal: 50,
+    paddingVertical:10
 	},
   buttonIcon: {
     width: 24,  // Specify the width of the icon
     height: 24, // Specify the height of the icon
     resizeMode: 'contain', // This ensures the image is scaled proportionally
   },
+
+  innerImage: {
+      width: 200, // Half the width of the background
+      height:250,
+      // height: '100%', // Half the height of the background
+      alignSelf: 'flex-end'
+      // If you want a specific size, you can set explicit dimensions
+    },
+
+
+  headerTitle: {
+    fontSize: 35,
+    // fontWeight: 'bold',
+    color: '#FFFFFF', // Adjust the color as needed
+    fontFamily: 'Poppins-Regular',
+    // alignSelf: 'flex-start', // Aligns the text to the left of its container
+    marginRight: 70,
+    paddingLeft: 20
+  },
+  headerContainer: {
+    flexDirection: 'row', // Aligns children (Text and Image) in a row
+    alignItems: 'center', // Centers children vertically in the container
+    justifyContent: 'flex-start', // Aligns children to the start of the container
+    backgroundColor: '#2DCC70', // The background color
+    width: '100%',
+    height: 250, // The height of your header area
+  },
+
 });
 
 
@@ -82,12 +116,25 @@ export default function SignInScreen() {
 
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container1}>
+        {/* <View style={{alignItems: 'center', backgroundColor:'#2DCC70', flex:1, height:10}}> */}
+        <View style={styles.headerContainer}>
+
+        <Text style={styles.headerTitle}>Log In</Text>
+
+        {/* <View style={styles.imageBackground}> */}
+        <ImageBackground source={require('../../assets/purepng 1.png')}
+        style={styles.innerImage}>
+        </ImageBackground>
+        </View>
+        {/* </View> */}
+
+      <View style={styles.container2}>
         <View>
           <TextInput
             autoCapitalize="none"
             value={emailAddress}
-            placeholder="Email..."
+            placeholder="Email"
             onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
             style={styles.inputField}
           />
@@ -96,7 +143,7 @@ export default function SignInScreen() {
         <View>
           <TextInput
             value={password}
-            placeholder="Password..."
+            placeholder="Password"
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
             style={styles.inputField}
@@ -104,31 +151,41 @@ export default function SignInScreen() {
         </View>
       <View>
         <View style={{alignItems: 'center'}}>  
-          <TouchableOpacity onPress={onSignInPress} style={{backgroundColor: '#2DCC70', borderRadius: 30, alignItems: 'center', marginTop: 10}}>
-            <Text style={{color: 'white', fontFamily: 'Poppins-Regular', fontSize: 20, paddingHorizontal: 50, padding: 10}}>Sign in</Text>
+          <TouchableOpacity onPress={onSignInPress} style=
+          {{backgroundColor: '#2DCC70', borderRadius: 30, 
+          alignItems: 'center',justifyContent:'center', marginTop: 10,
+          paddingHorizontal:5, paddingVertical:5}}>
+
+
+            <Text style=
+            {{color: 'white', fontFamily: 'Poppins-Regular', 
+            fontSize: 20, paddingHorizontal: 50, padding: 10}}>Sign in</Text>
           </TouchableOpacity>
         </View>
 
-        {/* <Link href="/reset" asChild>
-				<Pressable style={styles.button}>
-					<Text>Forgot password?</Text>
-				</Pressable>
-			</Link> */}
-			{/* <Link href="/SignUpScreen" asChild> */}
-      <View style={{alignItems: 'center'}}>
-				<Pressable style={[styles.button, {flexDirection: 'row'}]} onPress={() => navigation.navigate(SignUpScreen)}>
-          <Text style={{fontFamily: 'Poppins-Regular'}}>Do not have an account? </Text>
+
+      </View>
+      <View style={{alignItems: 'center', marginTop: 10}}>
+      <Text style={{fontFamily: 'Poppins-Regular', color: 'rgba(0, 0, 0, 0.5)' }}>Or login with</Text>
+
+      <TouchableOpacity onPress={SignInWithOAuth} style=
+          {{backgroundColor: '#2DCC70', borderRadius: 30, 
+          alignItems: 'center',justifyContent:'center', marginTop: 10,
+          paddingHorizontal:5, paddingVertical:5}}>
+      <Image source={require('../../assets/icons8-google-40(-mdpi).png')}/>
+
+      </TouchableOpacity>        
+        </View>
+
+    
+
+        <View style={{alignItems: 'center'}}>
+				<Pressable style={[styles.button, {flexDirection: 'row'}, {marginTop:10}]} onPress={() => navigation.navigate(SignUpScreen)}>
+          <Text style={{fontFamily: 'Poppins-Regular', color: 'rgba(0, 0, 0, 0.5)'}}>Do not have an account? </Text>
 					<Text style={{fontFamily: 'Poppins-Regular', color: '#2DCC70'}}>Sign Up</Text>
 				</Pressable>
       </View>
-			{/* </Link> */}
       </View>
-      <View>
-      <TouchableOpacity style={styles.button} onPress={SignInWithOAuth}>
-        <Image source={googleIcon}/>
-        {/* <Text style={styles.buttonText}>Sign in with Google</Text> */}
-      </TouchableOpacity>        
-        </View>
     </View>
       
     )};

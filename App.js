@@ -57,7 +57,7 @@ export default function App() {
               <Unauthenticated>
                 <Stack.Navigator>
                   <Stack.Screen name="SignInScreen" component={SignInScreen} options={{headerShown: false}}/>
-                  <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+                  <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{headerShown: false}} />
                 </Stack.Navigator>
               </Unauthenticated>
 
