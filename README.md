@@ -12,6 +12,7 @@ Download your iOS emulator of choice. FoodBridge is optimised for iPhone 15 and 
 git clone https://github.com/tanhaoen/FoodBridge
 cd project
 npm install
+npx convex dev
 npm start
 ```
 
